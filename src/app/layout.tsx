@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/ui/layout/header";
+import Image from "next/image";
 
 export const metadata: Metadata = {
     title: "fittrack",
@@ -14,9 +15,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body>
+            <body className="mb-10">
                 <Header />
-                <div className="container mt-[105px]">{children}</div>
+                <div className="mt-[calc(105px+4rem)] mx-auto relative sm:w-[400px] w-[300px] h-[85px] sm:h-[110px]">
+                    <Image src={"/logo.png"} alt="" fill sizes="(max-width: 640px) 300px, 400px" />
+                </div>
+                <div className="container">{children}</div>
             </body>
         </html>
     );

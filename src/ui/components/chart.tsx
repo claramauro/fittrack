@@ -1,7 +1,7 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { Card, CardContent } from "../shadcn/components/ui/card";
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../shadcn/components/ui/chart";
 
 function generateTicks(min: number, max: number, step: number): number[] {
@@ -28,7 +28,6 @@ export default function Chart() {
 
     // Génération des ticks tous les 5
     const yTicks = generateTicks(minRange, maxRange, 5);
-    console.log(yTicks);
 
     const chartConfig: ChartConfig = {
         weight: {
@@ -38,40 +37,51 @@ export default function Chart() {
     };
 
     return (
-        <Card>
-            <CardContent>
+        <Card className="border-zinc-200 shadow-sm max-w-6xl mx-auto">
+            <CardHeader>
+                <CardTitle>Évolution du poids</CardTitle>
+            </CardHeader>
+            <CardContent className="overflow-x-auto">
                 <ChartContainer config={chartConfig} className="min-h-[300px]">
-                    <LineChart
-                        accessibilityLayer
-                        data={weightData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => value.slice(5)}
-                        />
-                        <YAxis
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            domain={[minRange, maxRange]}
-                            ticks={yTicks}
-                        />
-                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                        <Line
-                            dataKey="weight"
-                            type="linear"
-                            stroke="var(--color-weight)"
-                            strokeWidth={1.5}
-                            dot={true}
-                        />
-                    </LineChart>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <LineChart
+                            accessibilityLayer
+                            data={weightData}
+                            margin={{
+                                top: 0,
+                                bottom: 0,
+                                left: -25,
+                                right: 20,
+                            }}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="date"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={(value) => value.slice(5)}
+                            />
+                            <YAxis
+                                dataKey={"kg"}
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                domain={[minRange, maxRange]}
+                                ticks={yTicks}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent hideLabel valueFormatter={(value) => `${value} kg`} />}
+                            />
+                            <Line
+                                dataKey="weight"
+                                type="linear"
+                                stroke="var(--color-weight)"
+                                strokeWidth={1.5}
+                                dot={true}
+                            />
+                        </LineChart>
+                    </ResponsiveContainer>
                 </ChartContainer>
             </CardContent>
         </Card>
