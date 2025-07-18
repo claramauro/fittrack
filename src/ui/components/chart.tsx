@@ -39,7 +39,7 @@ export default function Chart() {
     return (
         <Card className="border-zinc-200 shadow-sm max-w-6xl mx-auto">
             <CardHeader>
-                <CardTitle>Évolution du poids</CardTitle>
+                <CardTitle className="font-poppins text-lg">Évolution du poids</CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto">
                 <ChartContainer config={chartConfig} className="min-h-[300px]">
