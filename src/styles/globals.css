@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+    --color-main: var(--main);
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --font-sans: var(--font-geist-sans);
@@ -44,6 +45,7 @@
 }
 
 :root {
+    --main: var(--color-chart-2);
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);
@@ -147,5 +149,31 @@
 
     .font-poppins {
         font-family: var(--font-poppins), sans-serif;
+    }
+
+    .active {
+        color: var(--main);
+    }
+
+    .link-underline {
+        position: relative;
+        display: inline-block;
+    }
+
+    .link-underline::after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: -4px;
+        transform: translateX(-50%) scaleX(0);
+        transform-origin: center;
+        width: 100%;
+        height: 1px;
+        background-color: var(--main);
+        transition: transform 0.3s ease;
+    }
+
+    .link-underline:hover::after {
+        transform: translateX(-50%) scaleX(1);
     }
 }

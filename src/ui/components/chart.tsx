@@ -32,7 +32,7 @@ export default function Chart() {
     const chartConfig: ChartConfig = {
         weight: {
             label: "Poids",
-            color: "var(--color-chart-2)",
+            color: "var(--main)",
         },
     };
 
@@ -73,13 +73,7 @@ export default function Chart() {
                                 cursor={false}
                                 content={<ChartTooltipContent hideLabel valueFormatter={(value) => `${value} kg`} />}
                             />
-                            <Line
-                                dataKey="weight"
-                                type="linear"
-                                stroke="var(--color-weight)"
-                                strokeWidth={1.5}
-                                dot={true}
-                            />
+                            <Line dataKey="weight" type="linear" stroke="var(--main)" strokeWidth={1.5} dot={true} />
                         </LineChart>
                     </ResponsiveContainer>
                 </ChartContainer>

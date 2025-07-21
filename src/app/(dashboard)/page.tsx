@@ -95,7 +95,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-                <Button asChild className="bg-chart-2">
+                <Button asChild className="bg-main hover:bg-main hover:opacity-80 transition-all">
                     <Link href={"/mesures"}>Voir l'historique</Link>
                 </Button>
             </div>
