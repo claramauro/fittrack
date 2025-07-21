@@ -1,5 +1,5 @@
+import Button from "@/ui/components/button";
 import Chart from "@/ui/components/chart";
-import { Button } from "@/ui/shadcn/components/ui/button";
 import Link from "next/link";
 
 export default function Dashboard() {
@@ -95,8 +95,8 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </div>
-                <Button asChild className="bg-main hover:bg-main hover:opacity-80 transition-all">
-                    <Link href={"/mesures"}>Voir l'historique</Link>
+                <Button>
+                    <Link href={"/mesures"}>Voir l&apos;historique</Link>
                 </Button>
             </div>
         </div>
