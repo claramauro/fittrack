@@ -1,8 +1,16 @@
+"use client";
+
 import Button from "@/ui/components/button";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
+import { useEffect } from "react";
+import { login } from "../../libs/services/auth";
 
 export default function Login() {
+    useEffect(() => {
+        login({ email: "clara.mauro@hotmail.fr", password: "1234" });
+    }, []);
+
     return (
         <div className="flex flex-col items-center justify-center h-full">
             <h2 className="mb-6 text-center text-2xl font-bold">Connexion</h2>
