@@ -1,5 +1,5 @@
-import { getUserByEmail } from "@/libs/database/user/queries";
-import { errorHandler } from "@/libs/errorHandler";
+import { authenticateUser } from "@/libs/auth";
+import { errorHandler } from "@/libs/errors/errorHandler";
 import { loginSchema } from "@/libs/validation/authSchema";
 
 export async function POST(req: Request) {
@@ -9,10 +9,12 @@ export async function POST(req: Request) {
         if (!validationResult.success) {
             throw validationResult.error;
         }
-        return new Response(JSON.stringify({ message: "Success" }), { status: 200 });
+        const { email, password } = validationResult.data;
+        const user = await authenticateUser(email, password);
+        // Générer JWT
+        return new Response(JSON.stringify({ message: "Connexion réussie" }), { status: 200 });
     } catch (error) {
         console.log(error);
         return errorHandler(error);
     }
-    //const user = await getUserByEmail();
 }
