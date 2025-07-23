@@ -1,5 +1,5 @@
 import { compare } from "bcrypt-ts";
-import { JWTPayload, SignJWT } from "jose";
+import { JWTPayload, jwtVerify, SignJWT } from "jose";
 import { getUserByEmail } from "./database/user";
 import { ValidationError } from "./errors/customErrors";
 
@@ -25,4 +25,18 @@ export async function generateToken(payload: JWTPayload): Promise<string> {
         .sign(secret);
 
     return jwt;
+}
+
+export async function checkToken(token: string) {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    if (!secret) {
+        throw new Error("JWT_SECRET is not defined");
+    }
+    try {
+        await jwtVerify(token, secret);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }

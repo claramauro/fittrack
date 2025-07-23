@@ -1,7 +1,6 @@
 import { authenticateUser, generateToken } from "@/libs/server/auth";
 import { errorHandler } from "@/libs/server/errors/errorHandler";
 import { loginSchema } from "@/libs/validation/authSchema";
-import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {

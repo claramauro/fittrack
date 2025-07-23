@@ -5,7 +5,7 @@ import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
 import clsx from "clsx";
 import { FormEvent, useState } from "react";
-import { login } from "../../libs/services/auth";
+import { login } from "../../libs/client/services/auth";
 import * as z from "zod";
 import { loginSchema } from "@/libs/validation/authSchema";
 import { redirect } from "next/navigation";

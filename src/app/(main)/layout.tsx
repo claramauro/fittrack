@@ -17,7 +17,7 @@ export default function MainLayout({
         <>
             <Header />
             <div className="mt-[calc(105px+4rem)] mx-auto relative sm:w-[400px] w-[300px] h-[85px] sm:h-[110px]">
-                <Image src={"/logo.png"} alt="" priority fill sizes="(max-width: 640px) 300px, 400px" />
+                <Image src={"/images/logo.png"} alt="" priority fill sizes="(max-width: 640px) 300px, 400px" />
             </div>
             <div className="container">{children}</div>
             <Footer />
