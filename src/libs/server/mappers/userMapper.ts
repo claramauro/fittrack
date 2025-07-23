@@ -1,5 +1,5 @@
-import { UserDb } from "@/types/db/user";
-import { User } from "@/types/user";
+import { UserDb } from "@/libs/types/db/user";
+import { User } from "@/libs/types/user";
 
 export function mapUserDbToUser(userDb: UserDb): User {
     return {

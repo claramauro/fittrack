@@ -8,6 +8,7 @@ import { FormEvent, useState } from "react";
 import { login } from "../../libs/services/auth";
 import * as z from "zod";
 import { loginSchema } from "@/libs/validation/authSchema";
+import { redirect } from "next/navigation";
 
 export default function Login() {
     const [inputError, setInputError] = useState<{ email: string; password: string } | null>(null);
@@ -30,15 +31,16 @@ export default function Login() {
                 return;
             }
             setInputError(null);
-            const data = await login(email, password);
+            await login(email, password);
             setFormError("");
-            // Redirection
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setFormError(error.message);
             } else {
                 setFormError("Erreur inconnue");
             }
+        } finally {
+            redirect("/");
         }
     }
 

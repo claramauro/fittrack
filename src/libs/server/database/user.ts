@@ -1,6 +1,6 @@
-import { mapUserDbToUser } from "@/libs/mappers/userMapper";
-import { pool } from "../connection";
-import { UserDb } from "@/types/db/user";
+import { mapUserDbToUser } from "@/libs/server/mappers/userMapper";
+import { pool } from "./connection";
+import { UserDb } from "@/libs/types/db/user";
 import { RowDataPacket } from "mysql2";
 
 export async function getUserByEmail(email: string) {
