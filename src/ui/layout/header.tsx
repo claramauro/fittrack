@@ -5,7 +5,7 @@ import Avatar from "../components/avatar";
 import { Button } from "../shadcn/components/ui/button";
 import { LogOut } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { navLinks } from "@/libs/navLinks";
+import { navLinks } from "@/libs/constants/navLinks";
 
 export default function Header() {
     const pathname = usePathname();
