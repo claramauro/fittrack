@@ -4,11 +4,23 @@ import Link from "next/link";
 import Avatar from "../components/avatar";
 import { Button } from "../shadcn/components/ui/button";
 import { LogOut } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { navLinks } from "@/libs/constants/navLinks";
+import { logout } from "@/libs/client/services/auth";
 
 export default function Header() {
     const pathname = usePathname();
+    const router = useRouter();
+
+    async function handleLogout() {
+        try {
+            await logout();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            router.replace("/login");
+        }
+    }
 
     return (
         <header className="py-6 bg-white min-h-[105px] border-b border-gray-300 fixed top-0 left-0 right-0 z-50">
@@ -36,7 +48,8 @@ export default function Header() {
                         size={"icon"}
                         aria-label="Se déconnecter"
                         title="Déconnexion"
-                        className="cursor-pointer">
+                        className="cursor-pointer"
+                        onClick={handleLogout}>
                         <LogOut className="!w-6 !h-6 text-zinc-600" />
                     </Button>
                 </div>

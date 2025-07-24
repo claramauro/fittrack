@@ -13,3 +13,15 @@ export async function login(email: string, password: string) {
     }
     return data;
 }
+
+export async function logout() {
+    const response = await fetch("/api/logout", {
+        method: "POST",
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Une erreur est survenue, veuillez réessayer.");
+    }
+    return data;
+}
