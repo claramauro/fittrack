@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
 
     if (!token) {
         if (isPrivateRoute) {
-            return NextResponse.redirect(new URL("/login", request.url));
+            return NextResponse.redirect(new URL("/connexion", request.url));
         }
         return NextResponse.next();
     }
@@ -17,12 +17,12 @@ export async function middleware(request: NextRequest) {
     const isValidToken = await checkToken(token.value);
 
     if (!isValidToken) {
-        const response = NextResponse.redirect(new URL("/login", request.url));
+        const response = NextResponse.redirect(new URL("/connexion", request.url));
         response.cookies.delete("auth_token");
         return response;
     }
 
-    if (pathname === "/login") {
+    if (pathname === "/connexion") {
         // Utilisateur authentifié avec token valide -> redirection sur dashboard
         return NextResponse.redirect(new URL("/", request.url));
     }

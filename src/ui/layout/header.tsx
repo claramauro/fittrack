@@ -18,7 +18,7 @@ export default function Header() {
         } catch (error) {
             console.log(error);
         } finally {
-            router.replace("/login");
+            router.replace("/connexion");
         }
     }
 

@@ -5,12 +5,12 @@ import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
 import clsx from "clsx";
 import { FormEvent, useState } from "react";
-import { login } from "../../libs/client/services/auth";
+import { login } from "../../../libs/client/services/auth";
 import * as z from "zod";
 import { loginSchema } from "@/libs/validation/authSchema";
 import { useRouter } from "next/navigation";
 
-export default function Login() {
+export default function LoginForm() {
     const [inputError, setInputError] = useState<{ email: string; password: string } | null>(null);
     const [formError, setFormError] = useState("");
 
@@ -47,9 +47,9 @@ export default function Login() {
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-full">
+        <div className="w-full">
             <h2 className="mb-6 text-center text-2xl font-bold">Connexion</h2>
-            <form action="" className="flex flex-col items-center w-2/3 max-w-2xl" onSubmit={handleSubmit}>
+            <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl" onSubmit={handleSubmit}>
                 <div className="mb-6 w-full">
                     <Label htmlFor="email" className="mb-2 text-md">
                         Email
