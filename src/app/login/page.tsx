@@ -8,11 +8,13 @@ import { FormEvent, useState } from "react";
 import { login } from "../../libs/client/services/auth";
 import * as z from "zod";
 import { loginSchema } from "@/libs/validation/authSchema";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
     const [inputError, setInputError] = useState<{ email: string; password: string } | null>(null);
     const [formError, setFormError] = useState("");
+
+    const router = useRouter();
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -40,7 +42,7 @@ export default function Login() {
                 setFormError("Erreur inconnue");
             }
         } finally {
-            redirect("/");
+            router.push("/");
         }
     }
 
