@@ -19,7 +19,6 @@ export async function POST(req: NextRequest) {
             throw new ValidationError("Impossible de créer le compte avec ces informations.", 409);
         }
 
-        // Vérif si email existe deja
         // Ajouter en BDD
         // Envoie mail
     } catch (error) {

@@ -7,11 +7,12 @@ import clsx from "clsx";
 import { FormEvent, useState } from "react";
 import { login } from "../../../libs/client/services/auth";
 import * as z from "zod";
-import { loginSchema } from "@/libs/validation/authSchema";
+import { LoginField, loginSchema } from "@/libs/validation/authSchema";
 import { useRouter } from "next/navigation";
+import { FormError } from "@/libs/client/errors/customErrors";
 
 export default function LoginForm() {
-    const [inputErrors, setInputErrors] = useState<{ email: string; password: string } | null>(null);
+    const [inputErrors, setInputErrors] = useState<{ email: string; password: string }>({ email: "", password: "" });
     const [formError, setFormError] = useState("");
 
     const router = useRouter();
@@ -32,12 +33,22 @@ export default function LoginForm() {
                 });
                 return;
             }
-            setInputErrors(null);
+            setInputErrors({ email: "", password: "" });
             await login(email, password);
             setFormError("");
         } catch (error: unknown) {
-            if (error instanceof Error) {
+            if (error instanceof FormError) {
                 setFormError(error.message);
+                if (error.errors) {
+                    setInputErrors((prev) => {
+                        const errors: typeof inputErrors = { ...prev };
+                        error.errors?.forEach((err) => {
+                            errors[err.field as LoginField] = err.message;
+                        });
+
+                        return errors;
+                    });
+                }
             } else {
                 setFormError("Erreur inconnue, veuillez réessayer");
             }
@@ -83,7 +94,7 @@ export default function LoginForm() {
                     <Button type={"submit"}>Se connecter</Button>
                 </div>
             </form>
-            <div className="error-message mt-5">{formError && formError}</div>
+            <div className="error-message mt-5 text-center">{formError && formError}</div>
         </>
     );
 }

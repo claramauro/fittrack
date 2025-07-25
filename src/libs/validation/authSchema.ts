@@ -1,5 +1,8 @@
 import * as z from "zod";
 
+type LoginSchema = z.infer<typeof loginSchema>;
+export type LoginField = keyof LoginSchema;
+
 export const loginSchema = z.strictObject({
     email: z.email("Le format de l'email n'est pas valide"),
     password: z.string().min(1, "Le mot de passe est requis"),
