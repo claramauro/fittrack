@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     try {
         const validationResult = loginSchema.safeParse(body);
-        if (!validationResult.success) {
+        if (validationResult.error) {
             throw validationResult.error;
         }
         const { email, password } = validationResult.data;

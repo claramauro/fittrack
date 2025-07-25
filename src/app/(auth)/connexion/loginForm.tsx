@@ -11,7 +11,7 @@ import { loginSchema } from "@/libs/validation/authSchema";
 import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
-    const [inputError, setInputError] = useState<{ email: string; password: string } | null>(null);
+    const [inputErrors, setInputErrors] = useState<{ email: string; password: string } | null>(null);
     const [formError, setFormError] = useState("");
 
     const router = useRouter();
@@ -24,22 +24,22 @@ export default function LoginForm() {
         try {
             const validationSchema = loginSchema.safeParse({ email, password });
 
-            if (!validationSchema.success) {
+            if (validationSchema.error) {
                 const schemaErrors = z.flattenError(validationSchema.error);
-                setInputError({
+                setInputErrors({
                     email: schemaErrors.fieldErrors.email?.[0] ?? "",
                     password: schemaErrors.fieldErrors.password?.[0] ?? "",
                 });
                 return;
             }
-            setInputError(null);
+            setInputErrors(null);
             await login(email, password);
             setFormError("");
         } catch (error: unknown) {
             if (error instanceof Error) {
                 setFormError(error.message);
             } else {
-                setFormError("Erreur inconnue");
+                setFormError("Erreur inconnue, veuillez réessayer");
             }
         } finally {
             router.push("/");
@@ -47,8 +47,7 @@ export default function LoginForm() {
     }
 
     return (
-        <div className="w-full">
-            <h2 className="mb-6 text-center text-2xl font-bold">Connexion</h2>
+        <>
             <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl" onSubmit={handleSubmit}>
                 <div className="mb-6 w-full">
                     <Label htmlFor="email" className="mb-2 text-md">
@@ -60,10 +59,10 @@ export default function LoginForm() {
                         id="email"
                         className={clsx(
                             "focus-visible:ring-1 focus-visible:ring-main !text-lg",
-                            inputError?.email && "ring-2 ring-destructive"
+                            inputErrors?.email && "ring-2 ring-destructive"
                         )}
                     />
-                    <div className="error-message mt-1">{inputError?.email && inputError?.email}</div>
+                    <div className="error-message mt-1">{inputErrors?.email && inputErrors?.email}</div>
                 </div>
                 <div className="mb-6 w-full">
                     <Label htmlFor="password" className="mb-2 text-md">
@@ -75,16 +74,16 @@ export default function LoginForm() {
                         id="password"
                         className={clsx(
                             "focus-visible:ring-1 focus-visible:ring-main !text-lg",
-                            inputError?.password && "ring-2 ring-destructive"
+                            inputErrors?.password && "ring-2 ring-destructive"
                         )}
                     />
-                    <div className="error-message mt-1">{inputError?.password && inputError?.password}</div>
+                    <div className="error-message mt-1">{inputErrors?.password && inputErrors?.password}</div>
                 </div>
                 <div className="text-center !text-lg">
                     <Button type={"submit"}>Se connecter</Button>
                 </div>
             </form>
             <div className="error-message mt-5">{formError && formError}</div>
-        </div>
+        </>
     );
 }

@@ -13,10 +13,18 @@ export function errorHandler(err: unknown) {
         });
     }
     if (err instanceof ZodError) {
-        return new Response(JSON.stringify({ message: err.issues[0]?.message || "Données invalides" }), {
-            status: 400,
-            headers,
-        });
+        const errors = err.issues.map((issue) => ({
+            field: issue.path[0],
+            message: issue.message,
+        }));
+
+        return new Response(
+            JSON.stringify({ message: "Données invalides, veuillez corriger et soumettre à nouveau", errors }),
+            {
+                status: 400,
+                headers,
+            }
+        );
     }
     return new Response(JSON.stringify({ message: "Internal Error" }), { status: 500, headers });
 }

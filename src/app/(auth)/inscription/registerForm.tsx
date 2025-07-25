@@ -5,8 +5,10 @@ import { RegisterField, registerSchema } from "@/libs/validation/authSchema";
 import Button from "@/ui/components/button";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
+import { register } from "@/libs/client/services/auth";
+import { FormError } from "@/libs/client/errors/customErrors";
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -25,6 +27,8 @@ export default function RegisterForm() {
         confirmPassword: "",
     });
 
+    const [formError, setFormError] = useState("");
+
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         const { id, value } = event.currentTarget;
         setFormData((prev) => ({ ...prev, [id]: value }));
@@ -35,23 +39,81 @@ export default function RegisterForm() {
         const validationSchema = registerSchema.shape[id];
         const validationValue = validationSchema.safeParse(value);
 
-        if (!validationValue.success) {
+        if (validationValue.error) {
             const schemaError = z.flattenError(validationValue.error);
             setFormDataErrors((prev) => ({ ...prev, [id]: schemaError.formErrors[0] }));
+        } else {
+            setFormDataErrors((prev) => ({ ...prev, [id]: "" }));
+        }
+
+        if (id === "confirmPassword" || id === "password") {
+            const password = id === "password" ? value : formData.password;
+            const confirmPassword = id === "confirmPassword" ? value : formData.confirmPassword;
+            if (confirmPassword && password !== confirmPassword) {
+                setFormDataErrors((prev) => ({ ...prev, confirmPassword: "Les mots de passe ne correspondent pas" }));
+            } else {
+                setFormDataErrors((prev) => ({ ...prev, confirmPassword: "" }));
+            }
+        }
+    }
+
+    async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        if (Object.values(formDataErrors).some((value) => value !== "")) {
+            setFormError("Veuillez corriger les erreurs avant de soumettre");
             return;
         }
-        setFormDataErrors((prev) => ({ ...prev, [id]: "" }));
+        try {
+            const validationSchema = registerSchema.safeParse(formData);
+            if (validationSchema.error) {
+                const schemaErrors = z.flattenError(validationSchema.error);
 
-        // Gérer confirmPassword
+                setFormDataErrors((prev) => {
+                    const errors: typeof formDataErrors = { ...prev };
+                    for (const [key, value] of Object.entries(schemaErrors.fieldErrors)) {
+                        errors[key as RegisterField] = value ? value[0] : "";
+                    }
+                    return errors;
+                });
+                setFormError("Veuillez corriger les erreurs avant de soumettre");
+                return;
+            }
+            setFormDataErrors({
+                firstname: "",
+                lastname: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+            });
+            setFormError("");
+            await register(formData);
+        } catch (error) {
+            if (error instanceof FormError) {
+                setFormError(error.message);
+                if (error.errors) {
+                    setFormDataErrors((prev) => {
+                        const errors: typeof formDataErrors = { ...prev };
+                        error.errors?.forEach((err) => {
+                            errors[err.field as RegisterField] = err.message;
+                        });
+
+                        return errors;
+                    });
+                }
+            } else {
+                setFormError("Erreur inconnue, veuillez réessayer");
+            }
+        }
     }
 
     return (
-        <div className="w-full">
-            <h2 className="mb-6 text-center text-2xl font-bold">Inscription</h2>
-            <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl">
+        <>
+            <form action="" onSubmit={handleSubmit} className="flex flex-col items-center mx-auto w-2/3 max-w-2xl">
                 <div className="mb-6 w-full">
                     <Label htmlFor="firstname" className="mb-2 text-md">
                         Prénom
+                        <span>*</span>
                     </Label>
                     <Input
                         type="text"
@@ -69,6 +131,7 @@ export default function RegisterForm() {
                 <div className="mb-6 w-full">
                     <Label htmlFor="lastname" className="mb-2 text-md">
                         Nom
+                        <span>*</span>
                     </Label>
                     <Input
                         type="text"
@@ -86,6 +149,7 @@ export default function RegisterForm() {
                 <div className="mb-6 w-full">
                     <Label htmlFor="email" className="mb-2 text-md">
                         Email
+                        <span>*</span>
                     </Label>
                     <Input
                         type="text"
@@ -103,6 +167,7 @@ export default function RegisterForm() {
                 <div className="mb-6 w-full">
                     <Label htmlFor="password" className="mb-2 text-md">
                         Mot de passe
+                        <span>*</span>
                     </Label>
                     <Input
                         type="password"
@@ -115,15 +180,15 @@ export default function RegisterForm() {
                         onChange={handleChange}
                         value={formData.password}
                     />
-                    <div className="mt-1 text-gray-500 italic">
-                        Doit contenir au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un
-                        caractère spécial.
+                    <div className="mt-1 text-gray-500 italic text-sm">
+                        Au moins 8 caractères, dont une majuscule, une minuscule, un chiffre et un caractère spécial.
                     </div>
                     <div className="error-message mt-1">{formDataErrors?.password && formDataErrors?.password}</div>
                 </div>
                 <div className="mb-6 w-full">
                     <Label htmlFor="confirmPassword" className="mb-2 text-md">
                         Confirmation du mot de passe
+                        <span>*</span>
                     </Label>
                     <Input
                         type="password"
@@ -141,10 +206,14 @@ export default function RegisterForm() {
                         {formDataErrors?.confirmPassword && formDataErrors?.confirmPassword}
                     </div>
                 </div>
+                <div className="mr-auto text-gray-500 italic  text-sm">* champs requis</div>
                 <div className="text-center !text-lg">
                     <Button type={"submit"}>S&apos;inscrire</Button>
                 </div>
             </form>
-        </div>
+            <div className="error-message mt-5 text-center                                                ">
+                {formError && formError}
+            </div>
+        </>
     );
 }
