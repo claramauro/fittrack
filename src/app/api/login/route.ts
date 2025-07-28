@@ -1,4 +1,4 @@
-import { authenticateUser, generateToken } from "@/libs/server/auth";
+import { authenticateUser, generateToken } from "@/libs/server/services/auth";
 import { errorHandler } from "@/libs/server/errors/errorHandler";
 import { loginSchema } from "@/libs/validation/authSchema";
 import { NextRequest, NextResponse } from "next/server";

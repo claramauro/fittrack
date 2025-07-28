@@ -26,5 +26,5 @@ export function errorHandler(err: unknown) {
             }
         );
     }
-    return new Response(JSON.stringify({ message: "Internal Error" }), { status: 500, headers });
+    return new Response(JSON.stringify({ message: "Erreur interne, veuillez réessayer." }), { status: 500, headers });
 }

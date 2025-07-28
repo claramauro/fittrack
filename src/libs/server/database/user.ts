@@ -11,3 +11,13 @@ export async function getUserByEmail(email: string) {
     }
     return mapUserDbToUser(user);
 }
+
+export async function createUser(data: { firstname: string; lastname: string; email: string; password: string }) {
+    await pool.query("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)", [
+        data.firstname,
+        data.lastname,
+        data.email,
+        data.password,
+    ]);
+    return;
+}

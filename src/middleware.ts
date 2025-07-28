@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { privatePaths } from "./libs/constants/privatePaths";
-import { checkToken } from "./libs/server/auth";
+import { checkToken } from "./libs/server/services/auth";
 
 export async function middleware(request: NextRequest) {
     const token = request.cookies.get("auth_token");

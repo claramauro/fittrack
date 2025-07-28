@@ -28,6 +28,7 @@ export default function RegisterForm() {
     });
 
     const [formError, setFormError] = useState("");
+    const [formSuccess, setFormSucces] = useState("");
 
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         const { id, value } = event.currentTarget;
@@ -88,6 +89,9 @@ export default function RegisterForm() {
             });
             setFormError("");
             await register(formData);
+            setFormSucces(
+                "Inscription confirmée ! Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception pour activer votre compte."
+            );
         } catch (error) {
             if (error instanceof FormError) {
                 setFormError(error.message);
@@ -213,6 +217,9 @@ export default function RegisterForm() {
             </form>
             <div className="error-message mt-5 text-center                                                ">
                 {formError && formError}
+            </div>
+            <div className="success-message mt-5 text-center                                                ">
+                {formSuccess && formSuccess}
             </div>
         </>
     );

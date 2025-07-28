@@ -1,7 +1,8 @@
-import { compare } from "bcrypt-ts";
+import { compare, hash } from "bcrypt-ts";
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
-import { getUserByEmail } from "./database/user";
-import { ValidationError } from "./errors/customErrors";
+import { getUserByEmail } from "../database/user";
+import { ValidationError } from "../errors/customErrors";
+import { genSalt } from "bcrypt-ts/browser";
 
 export async function authenticateUser(email: string, password: string) {
     const user = await getUserByEmail(email);
@@ -39,4 +40,9 @@ export async function checkToken(token: string) {
         console.log(error);
         return false;
     }
+}
+
+export async function hashPassword(password: string) {
+    const salt = await genSalt(10);
+    return hash(password, salt);
 }

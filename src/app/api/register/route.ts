@@ -1,8 +1,10 @@
-import { getUserByEmail } from "@/libs/server/database/user";
+import { hashPassword } from "@/libs/server/services/auth";
+import { createUser, getUserByEmail } from "@/libs/server/database/user";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { errorHandler } from "@/libs/server/errors/errorHandler";
 import { registerSchema } from "@/libs/validation/authSchema";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { sendConfirmationRegisterEmail } from "@/libs/server/services/email";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
@@ -18,9 +20,12 @@ export async function POST(req: NextRequest) {
         if (user) {
             throw new ValidationError("Impossible de créer le compte avec ces informations.", 409);
         }
-
-        // Ajouter en BDD
-        // Envoie mail
+        const hashedPassword = await hashPassword(body.password);
+        const userData = { ...body, password: hashedPassword };
+        delete userData.confirmPassword;
+        await createUser(userData);
+        await sendConfirmationRegisterEmail(userData.firstname, userData.email, "test");
+        return NextResponse.json({ message: "Succès" }, { status: 200 });
     } catch (error) {
         console.log(error);
         return errorHandler(error);
