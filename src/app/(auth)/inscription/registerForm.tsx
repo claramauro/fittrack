@@ -93,6 +93,7 @@ export default function RegisterForm() {
                 "Inscription confirmée ! Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception pour activer votre compte."
             );
         } catch (error) {
+            setFormSucces("");
             if (error instanceof FormError) {
                 setFormError(error.message);
                 if (error.errors && error.errors.length > 0) {

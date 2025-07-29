@@ -21,13 +21,13 @@ export async function authenticateUser(email: string, password: string) {
     return user;
 }
 
-export async function generateToken(payload: JWTPayload): Promise<string> {
+export async function generateToken(payload: JWTPayload, exp: string): Promise<string> {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const alg = "HS256";
     const jwt = await new SignJWT(payload)
         .setProtectedHeader({ alg })
         .setIssuedAt()
-        .setExpirationTime("1d")
+        .setExpirationTime(exp)
         .sign(secret);
 
     return jwt;
@@ -39,11 +39,11 @@ export async function checkToken(token: string) {
         throw new Error("JWT_SECRET is not defined");
     }
     try {
-        await jwtVerify(token, secret);
-        return true;
+        const { payload } = await jwtVerify(token, secret);
+        return payload;
     } catch (error) {
         console.log(error);
-        return false;
+        return null;
     }
 }
 

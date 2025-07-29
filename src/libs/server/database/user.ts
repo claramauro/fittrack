@@ -1,9 +1,10 @@
 import { mapUserDbToUser } from "@/libs/server/mappers/userMapper";
 import { pool } from "./connection";
 import { UserDb } from "@/libs/types/db/user";
-import { RowDataPacket } from "mysql2";
+import { ResultSetHeader, RowDataPacket } from "mysql2";
+import { User } from "@/libs/types/user";
 
-export async function getUserByEmail(email: string) {
+export async function getUserByEmail(email: string): Promise<User | null> {
     const [rows] = await pool.query<RowDataPacket[]>("SELECT * FROM user WHERE email = ?", [email]);
     const user = rows[0] as UserDb;
     if (!user) {
@@ -12,12 +13,15 @@ export async function getUserByEmail(email: string) {
     return mapUserDbToUser(user);
 }
 
-export async function createUser(data: { firstname: string; lastname: string; email: string; password: string }) {
-    await pool.query("INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)", [
-        data.firstname,
-        data.lastname,
-        data.email,
-        data.password,
-    ]);
-    return;
+export async function createUser(data: {
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+}): Promise<number> {
+    const [rows] = await pool.query<ResultSetHeader>(
+        "INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)",
+        [data.firstname, data.lastname, data.email, data.password]
+    );
+    return rows.insertId;
 }

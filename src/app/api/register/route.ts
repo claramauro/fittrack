@@ -1,4 +1,4 @@
-import { hashPassword } from "@/libs/server/services/auth";
+import { generateToken, hashPassword } from "@/libs/server/services/auth";
 import { createUser, getUserByEmail } from "@/libs/server/database/user";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { errorHandler } from "@/libs/server/errors/errorHandler";
@@ -26,8 +26,10 @@ export async function POST(req: NextRequest) {
         const hashedPassword = await hashPassword(body.password);
         const userData = { ...body, password: hashedPassword };
         delete userData.confirmPassword;
-        await createUser(userData);
-        await sendConfirmationRegisterEmail(userData.firstname, userData.email, "test");
+        const userId = await createUser(userData);
+
+        const token = await generateToken({ id: userId, email: userData.email, type: "email_conformation" }, "1h");
+        await sendConfirmationRegisterEmail(userData.firstname, userData.email, token);
         return NextResponse.json({ message: "Succès" }, { status: 200 });
     } catch (error) {
         console.log(error);

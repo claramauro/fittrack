@@ -14,9 +14,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const isValidToken = await checkToken(token.value);
+    const payload = await checkToken(token.value);
 
-    if (!isValidToken) {
+    if (!payload) {
         const response = NextResponse.redirect(new URL("/connexion", request.url));
         response.cookies.delete("auth_token");
         return response;

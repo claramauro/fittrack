@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         }
         const { email, password } = validationResult.data;
         const user = await authenticateUser(email, password);
-        const jwt = await generateToken({ id: user.id, email: user.email });
+        const jwt = await generateToken({ id: user.id, email: user.email }, "1d");
 
         const response = NextResponse.json({ message: "Connexion réussie" }, { status: 200 });
         response.cookies.set({
