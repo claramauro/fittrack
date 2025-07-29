@@ -36,10 +36,11 @@ export default function LoginForm() {
             setInputErrors({ email: "", password: "" });
             await login(email, password);
             setFormError("");
+            router.push("/");
         } catch (error: unknown) {
             if (error instanceof FormError) {
                 setFormError(error.message);
-                if (error.errors) {
+                if (error.errors && error.errors.length > 0) {
                     setInputErrors((prev) => {
                         const errors: typeof inputErrors = { ...prev };
                         error.errors?.forEach((err) => {
@@ -48,53 +49,51 @@ export default function LoginForm() {
 
                         return errors;
                     });
+                } else {
+                    setInputErrors({ email: "", password: "" });
                 }
             } else {
                 setFormError("Erreur inconnue, veuillez réessayer");
             }
-        } finally {
-            router.push("/");
         }
     }
 
     return (
-        <>
-            <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl" onSubmit={handleSubmit}>
-                <div className="mb-6 w-full">
-                    <Label htmlFor="email" className="mb-2 text-md">
-                        Email
-                    </Label>
-                    <Input
-                        type="text"
-                        name="email"
-                        id="email"
-                        className={clsx(
-                            "focus-visible:ring-1 focus-visible:ring-main !text-lg",
-                            inputErrors?.email && "ring-2 ring-destructive"
-                        )}
-                    />
-                    <div className="error-message mt-1">{inputErrors?.email && inputErrors?.email}</div>
-                </div>
-                <div className="mb-6 w-full">
-                    <Label htmlFor="password" className="mb-2 text-md">
-                        Mot de passe
-                    </Label>
-                    <Input
-                        type="password"
-                        name="password"
-                        id="password"
-                        className={clsx(
-                            "focus-visible:ring-1 focus-visible:ring-main !text-lg",
-                            inputErrors?.password && "ring-2 ring-destructive"
-                        )}
-                    />
-                    <div className="error-message mt-1">{inputErrors?.password && inputErrors?.password}</div>
-                </div>
-                <div className="text-center !text-lg">
-                    <Button type={"submit"}>Se connecter</Button>
-                </div>
-            </form>
+        <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl" onSubmit={handleSubmit}>
+            <div className="mb-6 w-full">
+                <Label htmlFor="email" className="mb-2 text-md">
+                    Email
+                </Label>
+                <Input
+                    type="text"
+                    name="email"
+                    id="email"
+                    className={clsx(
+                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        inputErrors?.email && "ring-2 ring-destructive"
+                    )}
+                />
+                <div className="error-message mt-1">{inputErrors?.email && inputErrors?.email}</div>
+            </div>
+            <div className="mb-6 w-full">
+                <Label htmlFor="password" className="mb-2 text-md">
+                    Mot de passe
+                </Label>
+                <Input
+                    type="password"
+                    name="password"
+                    id="password"
+                    className={clsx(
+                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        inputErrors?.password && "ring-2 ring-destructive"
+                    )}
+                />
+                <div className="error-message mt-1">{inputErrors?.password && inputErrors?.password}</div>
+            </div>
+            <div className="text-center !text-lg">
+                <Button type={"submit"}>Se connecter</Button>
+            </div>
             <div className="error-message mt-5 text-center">{formError && formError}</div>
-        </>
+        </form>
     );
 }

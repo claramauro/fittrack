@@ -8,11 +8,14 @@ import { sendConfirmationRegisterEmail } from "@/libs/server/services/email";
 
 export async function POST(req: NextRequest) {
     const body = await req.json();
-
     try {
         const validationResult = registerSchema.safeParse(body);
         if (validationResult.error) {
-            throw validationResult.error;
+            const errors = validationResult.error.issues.map((issue) => ({
+                field: issue.path[0] as string,
+                message: issue.message,
+            }));
+            throw new ValidationError("Données invalides, veuillez corriger et soumettre à nouveau", 400, errors);
         }
 
         const user = await getUserByEmail(body.email);

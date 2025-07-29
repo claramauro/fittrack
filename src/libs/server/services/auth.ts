@@ -1,13 +1,18 @@
 import { compare, hash } from "bcrypt-ts";
 import { JWTPayload, jwtVerify, SignJWT } from "jose";
 import { getUserByEmail } from "../database/user";
-import { ValidationError } from "../errors/customErrors";
+import { AuthorizationError, ValidationError } from "../errors/customErrors";
 import { genSalt } from "bcrypt-ts/browser";
 
 export async function authenticateUser(email: string, password: string) {
     const user = await getUserByEmail(email);
     if (!user) {
         throw new ValidationError("Email ou mot de passe invalide");
+    }
+    if (!user.isVerified) {
+        throw new AuthorizationError(
+            "Votre compte n’est pas encore activé. Veuillez vérifier votre adresse email pour finaliser votre inscription"
+        );
     }
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) {

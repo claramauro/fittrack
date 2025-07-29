@@ -11,11 +11,10 @@ export async function login(email: string, password: string) {
 
     const data = await response.json();
     if (!response.ok) {
-        if (response.status === 400) {
-            throw new FormError(data.message, data.errors);
-        } else {
-            throw new Error(data.message || "Une erreur est survenue, veuillez réessayer.");
+        if (data.type === "userError") {
+            throw new FormError(data.message, data.errors, data.type);
         }
+        throw new Error("Une erreur est survenue, veuillez réessayer.");
     }
     return data;
 }
@@ -27,7 +26,7 @@ export async function logout() {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.message || "Une erreur est survenue, veuillez réessayer.");
+        throw new Error("Une erreur est survenue, veuillez réessayer.");
     }
     return data;
 }
@@ -50,10 +49,11 @@ export async function register(formData: {
     const data = await response.json();
 
     if (!response.ok) {
-        if (response.status === 400 || response.status === 409) {
-            throw new FormError(data.message, data.errors);
-        } else {
-            throw new Error(data.message || "Une erreur est survenue, veuillez réessayer.");
+        if (!response.ok) {
+            if (data.type === "userError") {
+                throw new FormError(data.message, data.errors, data.type);
+            }
+            throw new Error("Une erreur est survenue, veuillez réessayer.");
         }
     }
     return data;

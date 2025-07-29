@@ -10,5 +10,6 @@ export function mapUserDbToUser(userDb: UserDb): User {
         lastname: userDb.lastname,
         createdAt: userDb.created_at,
         updatedAt: userDb.updated_at,
+        isVerified: userDb.is_verified,
     };
 }

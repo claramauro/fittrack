@@ -6,4 +6,5 @@ export type UserDb = {
     lastname: string;
     created_at: Date;
     updated_at: Date | null;
+    is_verified: boolean;
 };
