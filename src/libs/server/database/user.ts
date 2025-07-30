@@ -25,3 +25,7 @@ export async function createUser(data: {
     );
     return rows.insertId;
 }
+
+export async function verifyUser(id: number) {
+    await pool.query<ResultSetHeader>("UPDATE user SET is_verified = true WHERE id = ?", [id]);
+}

@@ -34,7 +34,7 @@ async function createTransporter() {
     }
     try {
         await transporter?.verify();
-        console.log("Serveur prêt");
+        console.log("Serveur mail prêt");
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Erreur inconnue";
         throw new Error(`Erreur de configuration email: ${message}`);

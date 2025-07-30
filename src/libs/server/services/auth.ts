@@ -33,7 +33,7 @@ export async function generateToken(payload: JWTPayload, exp: string): Promise<s
     return jwt;
 }
 
-export async function checkToken(token: string) {
+export async function checkToken(token: string): Promise<JWTPayload> {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     if (!secret) {
         throw new Error("JWT_SECRET is not defined");
@@ -41,9 +41,12 @@ export async function checkToken(token: string) {
     try {
         const { payload } = await jwtVerify(token, secret);
         return payload;
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
-        return null;
+        if (error.code === "ERR_JWT_EXPIRED") {
+            throw new AuthorizationError("Token expiré", 401);
+        }
+        throw new Error(error.message);
     }
 }
 

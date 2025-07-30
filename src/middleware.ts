@@ -14,9 +14,9 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const payload = await checkToken(token.value);
-
-    if (!payload) {
+    try {
+        await checkToken(token.value);
+    } catch {
         const response = NextResponse.redirect(new URL("/connexion", request.url));
         response.cookies.delete("auth_token");
         return response;
