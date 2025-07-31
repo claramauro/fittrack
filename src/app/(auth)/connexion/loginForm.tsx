@@ -68,8 +68,9 @@ export default function LoginForm() {
                     type="text"
                     name="email"
                     id="email"
+                    placeholder="Adresse e-mail"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         inputErrors?.email && "ring-2 ring-destructive"
                     )}
                 />
@@ -83,8 +84,9 @@ export default function LoginForm() {
                     type="password"
                     name="password"
                     id="password"
+                    placeholder="Mot de passe"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         inputErrors?.password && "ring-2 ring-destructive"
                     )}
                 />

@@ -125,8 +125,9 @@ export default function RegisterForm() {
                     type="text"
                     name="firstname"
                     id="firstname"
+                    placeholder="Prénom"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         formDataErrors?.firstname && "ring-2 ring-destructive focus-visible:ring-destructive"
                     )}
                     onChange={handleChange}
@@ -143,8 +144,9 @@ export default function RegisterForm() {
                     type="text"
                     name="lastname"
                     id="lastname"
+                    placeholder="Nom de famille"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         formDataErrors?.lastname && "ring-2 ring-destructive focus-visible:ring-destructive"
                     )}
                     onChange={handleChange}
@@ -161,8 +163,9 @@ export default function RegisterForm() {
                     type="text"
                     name="email"
                     id="email"
+                    placeholder="Adresse e-mail"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         formDataErrors?.email && "ring-2 ring-destructive focus-visible:ring-destructive"
                     )}
                     onChange={handleChange}
@@ -179,8 +182,9 @@ export default function RegisterForm() {
                     type="password"
                     name="password"
                     id="password"
+                    placeholder="Mot de passe"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         formDataErrors?.password && "ring-2 ring-destructive focus-visible:ring-destructive"
                     )}
                     onChange={handleChange}
@@ -200,8 +204,9 @@ export default function RegisterForm() {
                     type="password"
                     name="confirmPassword"
                     id="confirmPassword"
+                    placeholder="Confirmer votre mot de passe"
                     className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main !text-lg",
+                        "focus-visible:ring-1 focus-visible:ring-main",
                         formDataErrors?.confirmPassword && "ring-2 ring-destructive focus-visible:ring-destructive"
                     )}
                     onChange={handleChange}
