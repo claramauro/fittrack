@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
             await sendConfirmationRegisterEmail(user.firstname, user.email, token);
         }
         return NextResponse.json(
-            { message: "Si un compte existe avec cet email, un lien de confirmation a été envoyé." },
+            { message: "Si un compte existe avec cet email, un lien de confirmation sera envoyé." },
             { status: 200 }
         );
     } catch (error) {

@@ -5,6 +5,7 @@ import { loginSchema } from "@/libs/validation/authSchema";
 import Button from "@/ui/components/button";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
+import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import { notFound, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -16,6 +17,7 @@ export default function ConfirmationEmail() {
     const [emailError, setEmailError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const params = useSearchParams();
     const status = params.get("status");
@@ -56,16 +58,19 @@ export default function ConfirmationEmail() {
         }
 
         try {
+            setIsLoading(true);
             const response = await resendConfirmationEmail(email as string);
             setSuccessMessage(response.message);
         } catch (error: unknown) {
             const message = error instanceof Error ? error.message : "Une erreur est survenue, veuillez réessayer.";
             setErrorMessage(message);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
-        <div className="flex flex-col items-center justify-center h-full px-12 gap-y-8">
+        <div className="flex flex-col items-center justify-center h-full p-12 gap-y-8">
             <h2 className="text-center text-2xl font-bold">
                 {status === "success" ? "Inscription finalisée ✅" : "Impossible de confirmer votre email ❌"}
             </h2>
@@ -86,11 +91,13 @@ export default function ConfirmationEmail() {
                 </Button>
             )}
             {wantNewMail && (
-                <form className="w-full flex flex-col gap-4" onSubmit={handleSubmit}>
+                <form className="w-full sm:w-[70%] min-[900px]:w-full flex flex-col gap-4" onSubmit={handleSubmit}>
                     <Label htmlFor="email">Email : </Label>
                     <Input id="email" name="email" type="text" placeholder="Adresse e-mail " />
                     {emailError && <p className="error-message">{emailError}</p>}
-                    <Button type="submit">Renvoyer un email</Button>
+                    <Button type={"submit"} disabled={isLoading}>
+                        {!isLoading ? "Renvoyer un email" : <Loader2Icon className="animate-spin" />}
+                    </Button>
                 </form>
             )}
             {successMessage && <p className="success-message">{successMessage}</p>}

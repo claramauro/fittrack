@@ -10,10 +10,13 @@ import * as z from "zod";
 import { LoginField, loginSchema } from "@/libs/validation/authSchema";
 import { useRouter } from "next/navigation";
 import { FormError } from "@/libs/client/errors/customErrors";
+import { Loader2Icon } from "lucide-react";
 
 export default function LoginForm() {
     const [inputErrors, setInputErrors] = useState<{ email: string; password: string }>({ email: "", password: "" });
     const [formError, setFormError] = useState("");
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const router = useRouter();
 
@@ -34,9 +37,11 @@ export default function LoginForm() {
                 return;
             }
             setInputErrors({ email: "", password: "" });
+            setIsLoading(true);
             await login(email, password);
             setFormError("");
             router.push("/");
+            setIsLoading(false);
         } catch (error: unknown) {
             if (error instanceof FormError) {
                 setFormError(error.message);
@@ -55,6 +60,7 @@ export default function LoginForm() {
             } else {
                 setFormError("Erreur inconnue, veuillez réessayer");
             }
+            setIsLoading(false);
         }
     }
 
@@ -93,7 +99,9 @@ export default function LoginForm() {
                 <div className="error-message mt-1">{inputErrors?.password && inputErrors?.password}</div>
             </div>
             <div className="text-center !text-lg">
-                <Button type={"submit"}>Se connecter</Button>
+                <Button type={"submit"} disabled={isLoading}>
+                    {!isLoading ? "Se connecter" : <Loader2Icon className="animate-spin" />}
+                </Button>
             </div>
             <div className="error-message mt-5 text-center">{formError && formError}</div>
         </form>
