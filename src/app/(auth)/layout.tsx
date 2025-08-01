@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     description: "L'application pour suivre ses objectifs de poids ",
 };
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex max-[900px]:flex-col min-h-screen h-screen">
             <div className="bg-main max-[900px]:w-full max-[900px]:h-2/5 h-full w-1/2 min-[900px]:max-w-3xl flex items-center justify-center">

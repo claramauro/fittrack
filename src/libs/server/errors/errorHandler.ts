@@ -1,22 +1,35 @@
-import { ZodError } from "zod";
-import { ValidationError } from "./customErrors";
+import { UserError } from "./customErrors";
+
+type ErrorResponse = {
+    message: string;
+    type: string;
+    errors?: { field: string; message: string }[];
+};
 
 export function errorHandler(err: unknown) {
     console.log(err);
     const headers = {
         "Content-Type": "application/json",
     };
-    if (err instanceof ValidationError) {
-        return new Response(JSON.stringify({ message: err.message || "Données invalides" }), {
-            status: err.statusCode || 400,
+
+    if (err instanceof UserError) {
+        const response: ErrorResponse = {
+            message: err.message,
+            type: "userError",
+        };
+
+        if ("errors" in err && Array.isArray(err.errors)) {
+            response.errors = err.errors;
+        }
+
+        return new Response(JSON.stringify(response), {
+            status: err.statusCode,
             headers,
         });
     }
-    if (err instanceof ZodError) {
-        return new Response(JSON.stringify({ message: err.issues[0]?.message || "Données invalides" }), {
-            status: 400,
-            headers,
-        });
-    }
-    return new Response(JSON.stringify({ message: "Internal Error" }), { status: 500, headers });
+
+    return new Response(JSON.stringify({ message: "Une erreur est survenue, veuillez réessayer." }), {
+        status: 500,
+        headers,
+    });
 }

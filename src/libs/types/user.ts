@@ -6,4 +6,5 @@ export type User = {
     lastname: string;
     createdAt: Date;
     updatedAt: Date | null;
+    isVerified: boolean;
 };

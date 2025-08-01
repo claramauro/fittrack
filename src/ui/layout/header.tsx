@@ -15,10 +15,9 @@ export default function Header() {
     async function handleLogout() {
         try {
             await logout();
+            router.replace("/connexion");
         } catch (error) {
             console.log(error);
-        } finally {
-            router.replace("/login");
         }
     }
 

@@ -177,6 +177,10 @@
         transform: translateX(-50%) scaleX(1);
     }
 
+    .success-message {
+        color: rgb(78, 173, 78);
+    }
+
     .error-message {
         color: var(--destructive);
     }
