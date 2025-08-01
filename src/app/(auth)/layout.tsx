@@ -22,7 +22,9 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
                     />
                 </div>
             </div>
-            <div className="max-[900px]:w-full max-[900px]:h-3/5 h-full w-1/2 flex-1">{children}</div>
+            <div className="max-[900px]:w-full max-[900px]:h-3/5 h-full w-1/2 flex-1 min-[900px]:overflow-y-auto">
+                {children}
+            </div>
         </div>
     );
 }

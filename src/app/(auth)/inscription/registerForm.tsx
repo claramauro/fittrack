@@ -9,6 +9,7 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import clsx from "clsx";
 import { register } from "@/libs/client/services/auth";
 import { FormError } from "@/libs/client/errors/customErrors";
+import { Loader2Icon } from "lucide-react";
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -29,6 +30,8 @@ export default function RegisterForm() {
 
     const [formError, setFormError] = useState("");
     const [formSuccess, setFormSucces] = useState("");
+
+    const [isLoading, setIsLoading] = useState(false);
 
     function handleChange(event: ChangeEvent<HTMLInputElement>) {
         const { id, value } = event.currentTarget;
@@ -60,7 +63,6 @@ export default function RegisterForm() {
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-
         if (Object.values(formDataErrors).some((value) => value !== "")) {
             setFormError("Veuillez corriger les erreurs avant de soumettre");
             return;
@@ -88,6 +90,8 @@ export default function RegisterForm() {
                 confirmPassword: "",
             });
             setFormError("");
+
+            setIsLoading(true);
             await register(formData);
             setFormSucces(
                 "Inscription confirmée ! Un e-mail de confirmation vous a été envoyé. Veuillez vérifier votre boîte de réception pour activer votre compte."
@@ -111,12 +115,14 @@ export default function RegisterForm() {
             } else {
                 setFormError("Erreur inconnue, veuillez réessayer");
             }
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
         <form action="" onSubmit={handleSubmit} className="flex flex-col items-center mx-auto w-2/3 max-w-2xl">
-            <div className="mb-6 w-full">
+            <div className="mb-4 w-full">
                 <Label htmlFor="firstname" className="mb-2 text-md">
                     Prénom
                     <span>*</span>
@@ -135,7 +141,7 @@ export default function RegisterForm() {
                 />
                 <div className="error-message mt-1">{formDataErrors?.firstname && formDataErrors?.firstname}</div>
             </div>
-            <div className="mb-6 w-full">
+            <div className="mb-4 w-full">
                 <Label htmlFor="lastname" className="mb-2 text-md">
                     Nom
                     <span>*</span>
@@ -154,7 +160,7 @@ export default function RegisterForm() {
                 />
                 <div className="error-message mt-1">{formDataErrors?.lastname && formDataErrors?.lastname}</div>
             </div>
-            <div className="mb-6 w-full">
+            <div className="mb-4 w-full">
                 <Label htmlFor="email" className="mb-2 text-md">
                     Email
                     <span>*</span>
@@ -173,7 +179,7 @@ export default function RegisterForm() {
                 />
                 <div className="error-message mt-1">{formDataErrors?.email && formDataErrors?.email}</div>
             </div>
-            <div className="mb-6 w-full">
+            <div className="mb-4 w-full">
                 <Label htmlFor="password" className="mb-2 text-md">
                     Mot de passe
                     <span>*</span>
@@ -195,7 +201,7 @@ export default function RegisterForm() {
                 </div>
                 <div className="error-message mt-1">{formDataErrors?.password && formDataErrors?.password}</div>
             </div>
-            <div className="mb-6 w-full">
+            <div className="mb-4 w-full">
                 <Label htmlFor="confirmPassword" className="mb-2 text-md">
                     Confirmation du mot de passe
                     <span>*</span>
@@ -218,15 +224,21 @@ export default function RegisterForm() {
                 </div>
             </div>
             <div className="mr-auto text-gray-500 italic  text-sm">* champs requis</div>
-            <div className="text-center !text-lg">
-                <Button type={"submit"}>S&apos;inscrire</Button>
+            <div className="text-center !text-lg mt-2">
+                <Button type={"submit"} disabled={isLoading}>
+                    {!isLoading ? "S'inscrire" : <Loader2Icon className="animate-spin" />}
+                </Button>
             </div>
-            <div className="error-message mt-5 text-center                                                ">
-                {formError && formError}
-            </div>
-            <div className="success-message mt-5 text-center                                                ">
-                {formSuccess && formSuccess}
-            </div>
+            {formError && (
+                <div className="error-message mt-4 not-last:text-center                                                ">
+                    {formError}
+                </div>
+            )}
+            {formSuccess && (
+                <div className="success-message mt-4 text-center                                                ">
+                    {formSuccess}
+                </div>
+            )}
         </form>
     );
 }
