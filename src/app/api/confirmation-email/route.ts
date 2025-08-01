@@ -12,30 +12,23 @@ export async function GET(req: NextRequest) {
         }
 
         const payload = await checkToken(token);
+        if (payload.type !== "email_confirmation") {
+            throw new ValidationError("Token invalide");
+        }
 
         const user = await getUserByEmail(payload.email as string);
 
         if (!user || Number(user.id) !== Number(payload.id)) {
             throw new ValidationError("Token invalide");
         }
-        // await verifyUser(Number(user.id));
-        return NextResponse.redirect(
-            new URL(
-                "/confirmation-email?status=success",
-                req.nextUrl.origin
-            )
-        );
+        await verifyUser(Number(user.id));
+        return NextResponse.redirect(new URL("/confirmation-email?status=success", req.nextUrl.origin));
     } catch (error) {
         console.log(error);
         let status = "error";
         if (error instanceof AuthorizationError) {
             status = "expired";
         }
-        return NextResponse.redirect(
-            new URL(
-                `/confirmation-email?status=${status}`,
-                req.nextUrl.origin
-            )
-        );
+        return NextResponse.redirect(new URL(`/confirmation-email?status=${status}`, req.nextUrl.origin));
     }
 }

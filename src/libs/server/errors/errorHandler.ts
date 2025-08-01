@@ -28,5 +28,8 @@ export function errorHandler(err: unknown) {
         });
     }
 
-    return new Response(JSON.stringify({ message: "Erreur interne, veuillez réessayer." }), { status: 500, headers });
+    return new Response(JSON.stringify({ message: "Une erreur est survenue, veuillez réessayer." }), {
+        status: 500,
+        headers,
+    });
 }

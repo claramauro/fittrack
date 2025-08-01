@@ -9,14 +9,16 @@ export async function authenticateUser(email: string, password: string) {
     if (!user) {
         throw new ValidationError("Email ou mot de passe invalide");
     }
+
+    const passwordMatch = await compare(password, user.password);
+    if (!passwordMatch) {
+        throw new ValidationError("Email ou mot de passe invalide");
+    }
+
     if (!user.isVerified) {
         throw new AuthorizationError(
             "Votre compte n’est pas encore activé. Veuillez vérifier votre adresse email pour finaliser votre inscription"
         );
-    }
-    const passwordMatch = await compare(password, user.password);
-    if (!passwordMatch) {
-        throw new ValidationError("Email ou mot de passe invalide");
     }
     return user;
 }

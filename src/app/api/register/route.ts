@@ -21,14 +21,18 @@ export async function POST(req: NextRequest) {
         const user = await getUserByEmail(body.email);
 
         if (user) {
-            throw new ValidationError("Impossible de créer le compte avec ces informations.", 409);
+            if (!user.isVerified) {
+                const token = await generateToken({ id: user.id, email: user.email, type: "email_confirmation" }, "1h");
+                await sendConfirmationRegisterEmail(user.firstname, user.email, token);
+            }
+            return NextResponse.json({ message: "Succès" }, { status: 200 });
         }
         const hashedPassword = await hashPassword(body.password);
         const userData = { ...body, password: hashedPassword };
         delete userData.confirmPassword;
         const userId = await createUser(userData);
 
-        const token = await generateToken({ id: userId, email: userData.email, type: "email_conformation" }, "1h");
+        const token = await generateToken({ id: userId, email: userData.email, type: "email_confirmation" }, "1h");
         await sendConfirmationRegisterEmail(userData.firstname, userData.email, token);
         return NextResponse.json({ message: "Succès" }, { status: 200 });
     } catch (error) {

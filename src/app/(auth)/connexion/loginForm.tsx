@@ -23,10 +23,10 @@ export default function LoginForm() {
         const email = formData.get("email")?.toString().trim() ?? "";
         const password = formData.get("password")?.toString().trim() ?? "";
         try {
-            const validationSchema = loginSchema.safeParse({ email, password });
+            const validationResult = loginSchema.safeParse({ email, password });
 
-            if (validationSchema.error) {
-                const schemaErrors = z.flattenError(validationSchema.error);
+            if (validationResult.error) {
+                const schemaErrors = z.flattenError(validationResult.error);
                 setInputErrors({
                     email: schemaErrors.fieldErrors.email?.[0] ?? "",
                     password: schemaErrors.fieldErrors.password?.[0] ?? "",
