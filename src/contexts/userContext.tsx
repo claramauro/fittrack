@@ -1,20 +1,37 @@
 "use client";
 
+import { fetchUser } from "@/libs/client/services/user";
+import { UserClient } from "@/libs/types/user";
 import { createContext, useContext, useEffect, useState } from "react";
 
-const UserContext = createContext(null);
+interface UserContextType {
+    user: UserClient | null;
+    isLoading: boolean;
+    error: string;
+}
+
+const UserContext = createContext<UserContextType | null>(null);
 
 export default function UserProvider({ children }: { children: React.ReactNode }) {
-    const [user, setUser] = useState(null);
-
+    const [user, setUser] = useState<UserClient | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
     useEffect(() => {
-        async function fetchUser() {
-            await fetch("/api/me");
+        async function loadUser() {
+            try {
+                setIsLoading(true);
+                const user = await fetchUser();
+                setUser(user);
+            } catch {
+                setError("Error lors du chargement, veuillez réessayer en rechargeant la page.");
+            } finally {
+                setIsLoading(false);
+            }
         }
-        fetchUser();
+        loadUser();
     }, []);
 
-    return <UserContext.Provider value={null}>{children}</UserContext.Provider>;
+    return <UserContext.Provider value={{ user, isLoading, error }}>{children}</UserContext.Provider>;
 }
 
 export function useUser() {

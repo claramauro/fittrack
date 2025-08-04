@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../shadcn/components/ui/chart";
 
@@ -42,40 +42,40 @@ export default function Chart() {
                 <CardTitle className="font-poppins text-lg">Évolution du poids</CardTitle>
             </CardHeader>
             <CardContent className="overflow-x-auto">
-                <ChartContainer config={chartConfig} className="min-h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart
-                            accessibilityLayer
-                            data={weightData}
-                            margin={{
-                                top: 0,
-                                bottom: 0,
-                                left: -25,
-                                right: 20,
-                            }}>
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                                dataKey="date"
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={8}
-                                tickFormatter={(value) => value.slice(5)}
-                            />
-                            <YAxis
-                                dataKey={"kg"}
-                                tickLine={false}
-                                axisLine={false}
-                                tickMargin={8}
-                                domain={[minRange, maxRange]}
-                                ticks={yTicks}
-                            />
-                            <ChartTooltip
-                                cursor={false}
-                                content={<ChartTooltipContent hideLabel valueFormatter={(value) => `${value} kg`} />}
-                            />
-                            <Line dataKey="weight" type="linear" stroke="var(--main)" strokeWidth={1.5} dot={true} />
-                        </LineChart>
-                    </ResponsiveContainer>
+                <ChartContainer config={chartConfig} className="min-h-[300px] min-w-[500px] w-full">
+                    <LineChart
+                        className="w-full"
+                        height={300}
+                        accessibilityLayer
+                        data={weightData}
+                        margin={{
+                            top: 0,
+                            bottom: 0,
+                            left: -25,
+                            right: 20,
+                        }}>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                            dataKey="date"
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            tickFormatter={(value) => value.slice(5)}
+                        />
+                        <YAxis
+                            dataKey={"kg"}
+                            tickLine={false}
+                            axisLine={false}
+                            tickMargin={8}
+                            domain={[minRange, maxRange]}
+                            ticks={yTicks}
+                        />
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel valueFormatter={(value) => `${value} kg`} />}
+                        />
+                        <Line dataKey="weight" type="linear" stroke="var(--main)" strokeWidth={1.5} dot={true} />
+                    </LineChart>
                 </ChartContainer>
             </CardContent>
         </Card>

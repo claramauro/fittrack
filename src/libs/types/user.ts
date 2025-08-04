@@ -8,3 +8,10 @@ export type User = {
     updatedAt: Date | null;
     isVerified: boolean;
 };
+
+export type UserClient = {
+    id: number;
+    email: string;
+    firstname: string;
+    lastname: string;
+};

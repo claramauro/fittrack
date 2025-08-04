@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Header from "@/ui/layout/header";
-import Image from "next/image";
-import Footer from "@/ui/layout/footer";
 import UserProvider from "@/contexts/userContext";
+import LayoutContent from "./layout-content";
 
 export const metadata: Metadata = {
     title: "FitTrack",
@@ -16,12 +14,7 @@ export default function MainLayout({
 }>) {
     return (
         <UserProvider>
-            <Header />
-            <div className="mt-[calc(105px+4rem)] mx-auto relative sm:w-[400px] w-[300px] h-[85px] sm:h-[110px]">
-                <Image src={"/images/logo.png"} alt="" priority fill sizes="(max-width: 640px) 300px, 400px" />
-            </div>
-            <div className="container">{children}</div>
-            <Footer />
+            <LayoutContent>{children}</LayoutContent>
         </UserProvider>
     );
 }

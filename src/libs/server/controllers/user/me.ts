@@ -10,17 +10,20 @@ export async function me(req: NextRequest) {
         if (!token) {
             throw new AuthorizationError("Non authentifié", 401);
         }
-        const { payload } = await checkToken(token);
+        const payload = await checkToken(token);
         if (!payload) {
             throw new Error("Token invalide");
         }
         const user = await getUserByEmail(payload.email as string);
-        // return NextResponse.json({
-        //     email: payload.email,
-        //     firstname: payload.firstname,
-        //     lastname: payload.lastname,
-        //     id: payload,
-        // });
+        if (!user) {
+            throw new AuthorizationError("Non authentifié", 401);
+        }
+        return NextResponse.json({
+            id: user.id,
+            email: user.email,
+            firstname: user.firstname,
+            lastname: user.lastname,
+        });
     } catch (error) {
         return errorHandler(error);
     }
