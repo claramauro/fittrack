@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/components/u
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../shadcn/components/ui/chart";
 
 function generateTicks(min: number, max: number, step: number): number[] {
-    const ticks = [];
+    const ticks = [min - step];
     for (let val = min; val <= max; val += step) {
         ticks.push(val);
     }

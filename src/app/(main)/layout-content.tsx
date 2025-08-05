@@ -24,7 +24,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
         );
     }
 
-    if (error) {
+    if (error || !user) {
         return (
             <div className="flex flex-col min-h-screen">
                 <Header />

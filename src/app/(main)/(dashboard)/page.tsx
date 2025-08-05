@@ -10,7 +10,7 @@ export default function Dashboard() {
 
     return (
         <div className="pt-10">
-            <h1 className="mb-10 text-4xl font-poppins font-medium">Hello {user?.firstname} !</h1>
+            <h1 className="mb-10 text-4xl font-poppins font-medium">Hello {user!.firstname} !</h1>
             <div className="mb-10 flex gap-6 flex-wrap justify-center min-[520px]:flex-nowrap">
                 <div className="border border-zinc-200 rounded-md shadow-sm p-6 aspect-square flex flex-col basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/6">
                     <h3 className="text-center sm:text-left sm:text-lg">Poids actuel</h3>
