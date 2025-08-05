@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import UserProvider from "@/contexts/userContext";
 import LayoutContent from "./layout-content";
+import MeasurementProvider from "@/contexts/measurementContext";
 
 export const metadata: Metadata = {
     title: "FitTrack",
@@ -14,7 +15,9 @@ export default function MainLayout({
 }>) {
     return (
         <UserProvider>
-            <LayoutContent>{children}</LayoutContent>
+            <MeasurementProvider>
+                <LayoutContent>{children}</LayoutContent>
+            </MeasurementProvider>
         </UserProvider>
     );
 }

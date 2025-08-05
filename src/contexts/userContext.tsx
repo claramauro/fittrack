@@ -23,7 +23,7 @@ export default function UserProvider({ children }: { children: React.ReactNode }
                 const user = await fetchUser();
                 setUser(user);
             } catch {
-                setError("Error lors du chargement, veuillez réessayer en rechargeant la page.");
+                setError("Error lors du chargement des données, veuillez réessayer en rechargeant la page.");
             } finally {
                 setIsLoading(false);
             }

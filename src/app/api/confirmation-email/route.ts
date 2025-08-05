@@ -1,6 +1,6 @@
 import { getUserByEmail, verifyUser } from "@/libs/server/database/user";
 import { AuthorizationError, ValidationError } from "@/libs/server/errors/customErrors";
-import { checkToken } from "@/libs/server/services/auth";
+import { getPayloadFromToken } from "@/libs/server/services/auth";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
             throw new ValidationError("Token manquant dans l'URL");
         }
 
-        const payload = await checkToken(token);
+        const payload = await getPayloadFromToken(token);
         if (payload.type !== "email_confirmation") {
             throw new ValidationError("Token invalide");
         }

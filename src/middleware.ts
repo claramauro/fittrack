@@ -26,7 +26,6 @@ export async function middleware(request: NextRequest) {
         // Utilisateur authentifié avec token valide -> redirection sur dashboard
         return NextResponse.redirect(new URL("/", request.url));
     }
-
     return NextResponse.next();
 }
 

@@ -1,1 +1,1 @@
-export const privatePaths = ["/", "/mesures", "/api/me"];
+export const privatePaths = ["/", "/mesures", "/api/me", "/api/measurements"];

@@ -5,6 +5,5 @@ export async function fetchUser(): Promise<UserClient | null> {
     if (!response.ok) {
         throw new Error("Error lors du chargement, veuillez réessayer.");
     }
-    const data = await response.json();
-    return data;
+    return response.json();
 }

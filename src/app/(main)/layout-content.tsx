@@ -1,14 +1,16 @@
 "use client";
 
+import { useMeasurement } from "@/contexts/measurementContext";
 import { useUser } from "@/contexts/userContext";
 import Footer from "@/ui/layout/footer";
 import Header from "@/ui/layout/header";
 import Image from "next/image";
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
-    const { user, isLoading, error } = useUser();
+    const { user, isLoading: isLoadingUser, error: userError } = useUser();
+    const { measurements, error: errorMeasurements } = useMeasurement();
 
-    if (isLoading) {
+    if (isLoadingUser) {
         return (
             <div className="flex flex-col min-h-screen">
                 <Header />
@@ -24,7 +26,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
         );
     }
 
-    if (error || !user) {
+    if (userError || errorMeasurements || !user || !measurements) {
         return (
             <div className="flex flex-col min-h-screen">
                 <Header />
@@ -32,7 +34,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
                     <Image src={"/images/logo.png"} alt="" priority fill sizes="(max-width: 640px) 300px, 400px" />
                 </div>
                 <div className="flex-1 flex flex-col justify-center items-center gap-y-4">
-                    <p>{error}</p>
+                    <p>{userError ? userError : errorMeasurements}</p>
                 </div>
                 <Footer />
             </div>
