@@ -27,3 +27,10 @@ export class AuthorizationError extends UserError {
         this.name = "AuthorizationError";
     }
 }
+
+export class ConflictError extends UserError {
+    constructor(message: string = "Conflit", statusCode: number = 409) {
+        super(message, statusCode);
+        this.name = "ConflictError";
+    }
+}

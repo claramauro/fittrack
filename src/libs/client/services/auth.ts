@@ -18,12 +18,10 @@ export async function register(formData: {
     const data = await response.json();
 
     if (!response.ok) {
-        if (!response.ok) {
-            if (data.type === "userError") {
-                throw new FormError(data.message, data.errors, data.type);
-            }
-            throw new Error("Une erreur est survenue, veuillez réessayer.");
+        if (data.type === "userError") {
+            throw new FormError(data.message, data.errors, data.type);
         }
+        throw new Error("Une erreur est survenue, veuillez réessayer.");
     }
     return data;
 }

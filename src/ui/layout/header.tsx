@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import Avatar from "../components/avatar";
+import Avatar from "@/ui/components/avatar";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/libs/constants/navLinks";
-import LogoutButton from "../components/LogoutButton";
+import LogoutButton from "@/ui/components/logoutButton";
 
 export default function Header() {
     const pathname = usePathname();

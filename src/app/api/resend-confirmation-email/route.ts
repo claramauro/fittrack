@@ -14,7 +14,11 @@ export async function POST(req: NextRequest) {
         const user = await getUserByEmail(email);
 
         if (user && !user.isVerified) {
-            const token = await generateToken({ id: user.id, email, type: "email_confirmation" }, "1h");
+            if (!process.env.JWT_EMAIL_SECRET) {
+                throw new Error("JWT_EMAIL_SECRET is not defined");
+            }
+            const secret = new TextEncoder().encode(process.env.JWT_EMAIL_SECRET);
+            const token = await generateToken({ id: user.id, email, type: "email_confirmation" }, "1h", secret);
             await sendConfirmationRegisterEmail(user.firstname, user.email, token);
         }
         return NextResponse.json(

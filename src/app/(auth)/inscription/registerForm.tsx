@@ -113,7 +113,7 @@ export default function RegisterForm() {
                     setFormDataErrors({ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" });
                 }
             } else {
-                setFormError("Erreur inconnue, veuillez réessayer");
+                setFormError("Une erreur est survenue, veuillez réessayer");
             }
         } finally {
             setIsLoading(false);
