@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Avatar from "@/ui/components/avatar";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/libs/constants/navLinks";
 import LogoutButton from "@/ui/components/logoutButton";
 
-export default function Header() {
+export default function Header({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
 
     return (
@@ -29,7 +28,8 @@ export default function Header() {
                     </ul>
                 </nav>
                 <div className="flex items-center gap-2">
-                    <Avatar />
+                    {/* <Avatar /> */}
+                    {children}
                     <LogoutButton />
                 </div>
             </div>
