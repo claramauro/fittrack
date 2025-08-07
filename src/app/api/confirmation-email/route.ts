@@ -1,38 +1,6 @@
-import { getUserByEmail, verifyUser } from "@/libs/server/database/user";
-import { AuthorizationError, ValidationError } from "@/libs/server/errors/customErrors";
-import { verifyAndDecodeToken } from "@/libs/server/services/auth";
-import { NextRequest, NextResponse } from "next/server";
+import { confirmationEmailController } from "@/libs/server/controllers/auth/confirmation-email";
+import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
-    try {
-        const token = req.nextUrl.searchParams.get("token");
-
-        if (!token) {
-            throw new ValidationError("Token manquant dans l'URL");
-        }
-
-        if (!process.env.JWT_EMAIL_SECRET) {
-            throw new Error("JWT_EMAIL_SECRET is not defined");
-        }
-        const secret = new TextEncoder().encode(process.env.JWT_EMAIL_SECRET);
-        const payload = await verifyAndDecodeToken(token, secret);
-        if (payload.type !== "email_confirmation") {
-            throw new ValidationError("Token invalide");
-        }
-
-        const user = await getUserByEmail(payload.email as string);
-
-        if (!user || Number(user.id) !== Number(payload.id)) {
-            throw new ValidationError("Token invalide");
-        }
-        await verifyUser(Number(user.id));
-        return NextResponse.redirect(new URL("/confirmation-email?status=success", req.nextUrl.origin));
-    } catch (error) {
-        console.log(error);
-        let status = "error";
-        if (error instanceof AuthorizationError) {
-            status = "expired";
-        }
-        return NextResponse.redirect(new URL(`/confirmation-email?status=${status}`, req.nextUrl.origin));
-    }
+    return confirmationEmailController(req);
 }
