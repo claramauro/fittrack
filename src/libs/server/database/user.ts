@@ -29,3 +29,15 @@ export async function createUser(data: {
 export async function verifyUser(id: number) {
     await pool.query<ResultSetHeader>("UPDATE user SET is_verified = true WHERE id = ?", [id]);
 }
+
+export async function updateUser(data: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+}) {
+    const query = "UPDATE user SET firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?";
+    const params = [data.firstname, data.lastname, data.email, data.password, data.id];
+    await pool.query<ResultSetHeader>(query, params);
+}

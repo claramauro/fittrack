@@ -1,19 +1,19 @@
-import { useUser } from "@/contexts/userContext";
 import Link from "next/link";
-import { Skeleton } from "../shadcn/components/ui/skeleton";
+import { getServerAuthSession } from "@/libs/server/nextAuthSession";
+import { redirect } from "next/navigation";
 
-export default function Avatar() {
-    const { user, isLoading } = useUser();
+export default async function Avatar() {
+    const session = await getServerAuthSession();
+    if (!session) {
+        redirect("/connexion");
+    }
+    const user = session?.user;
 
     function getInitial(firstname?: string, lastname?: string) {
         if (!firstname || !lastname) {
             return "";
         }
         return `${firstname[0]}${lastname[0]}`;
-    }
-
-    if (isLoading) {
-        return <Skeleton className="size-11 bg-zinc-200 rounded-full" />;
     }
 
     return (

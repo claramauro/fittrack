@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function Connexion() {
     return (
-        <div className="flex flex-col items-center justify-center h-full gap-y-8">
+        <div className="flex flex-col items-center justify-center h-full gap-y-8 py-10">
             <div className="w-full">
                 <h2 className="mb-6 text-center text-2xl font-bold">Connexion</h2>
                 <LoginForm />
