@@ -1,12 +1,6 @@
 "use client";
 
-import { useMeasurement } from "@/contexts/measurementContext";
-import { useUser } from "@/contexts/userContext";
-import Avatar from "@/ui/components/avatar";
-import Footer from "@/ui/layout/footer";
-import Header from "@/ui/layout/header";
 import { SessionProvider } from "next-auth/react";
-import Image from "next/image";
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
     // const { user, isLoading: isLoadingUser, error: userError } = useUser();
@@ -45,7 +39,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
 
     return (
         <SessionProvider>
-            <div className="container">{children}</div>
+            <main className="container">{children}</main>
         </SessionProvider>
     );
 }
