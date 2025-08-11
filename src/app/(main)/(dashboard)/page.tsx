@@ -49,11 +49,7 @@ export default async function DashboardPage() {
                 </div>
             </div>
             <div className="mb-10">
-                {/* {isLoading ? (
-                    <Skeleton className="max-w-6xl mx-auto min-h-[423px] md:min-h-[493px] lg:min-h-[635px] xl:min-h-[727px] w-full" />
-                ) : (
-                    <Chart />
-                )} */}
+                <Chart measurements={measurements} />
             </div>
             <MeasurementsSection measurements={measurements} />
         </div>
