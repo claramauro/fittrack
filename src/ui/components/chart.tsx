@@ -111,7 +111,6 @@ export default function Chart({ measurements }: { measurements: Measurement[] })
                         margin={{
                             top: 0,
                             bottom: 0,
-                            // left: -25,
                             right: -30,
                         }}>
                         <CartesianGrid vertical={false} />

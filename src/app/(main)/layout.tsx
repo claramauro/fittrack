@@ -16,7 +16,7 @@ export default function MainLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <>
+        <div className="flex flex-col min-h-screen">
             <Header>
                 <Avatar />
             </Header>
@@ -27,6 +27,6 @@ export default function MainLayout({
             </div>
             <LayoutContent>{children}</LayoutContent>
             <Footer />
-        </>
+        </div>
     );
 }
