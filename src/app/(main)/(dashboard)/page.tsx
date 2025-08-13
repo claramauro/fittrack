@@ -7,8 +7,9 @@ import { getActiveGoalByUser } from "@/libs/server/database/weight_goal";
 import { Measurement } from "@/libs/types/measurement";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 import clsx from "clsx";
-import Button from "@/ui/components/button";
-import { PencilIcon, PlusIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
+import CreateWeightGoalBtn from "./createWeightGoalBtn";
+import CreateWeightGoalModal from "./createWeightGoalModal";
 
 function getLatestWeight(measurements: Measurement[]) {
     let latestWeight = null;
@@ -52,9 +53,9 @@ export default async function DashboardPage() {
     let weightDifference: number | null = null;
 
     try {
-        [measurements, weightGoal] = await Promise.all([
+        [measurements /*, weightGoal*/] = await Promise.all([
             getMeasurementsByUserId(user.id),
-            getActiveGoalByUser(user.id),
+            // getActiveGoalByUser(user.id),
         ]);
         currentWeight = getLatestWeight(measurements);
         weightDifference = getWeightDifference(currentWeight, weightGoal?.targetWeight ?? null);
@@ -78,7 +79,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="border border-zinc-200 rounded-md shadow-sm flex flex-col w-[120px] h-[120px] min-[530px]:w-auto min-[530px]:h-auto aspect-square min-[500px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/5">
                     <div className="p-4 md:p-6 flex flex-col h-full">
-                        {weightGoal ? (
+                        {weightGoal?.targetWeight ? (
                             <div className="flex justify-between">
                                 <h3 className="text-center text-md sm:text-left sm:text-lg md:text-xl">Poids cible</h3>
                                 <button type="button" className="hover:cursor-pointer hover:scale-110">
@@ -100,11 +101,7 @@ export default async function DashboardPage() {
                             ) : (
                                 <>
                                     <p>Aucun objectif défini</p>
-                                    <Button
-                                        type="button"
-                                        className="rounded-full size-6 cursor-pointer hover:opacity-100 hover:scale-110">
-                                        <PlusIcon className="size-4" />
-                                    </Button>
+                                    <CreateWeightGoalModal />
                                 </>
                             )}
                         </div>
