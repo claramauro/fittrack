@@ -3,8 +3,8 @@ export enum GoalStatus {
     ARCHIVED = "ARCHIVED",
 }
 export type WeightGoal = {
-    id: number;
-    userId: number;
+    id: string;
+    userId: string;
     targetWeight: number | string;
     status: GoalStatus;
     createdAt: Date;

@@ -53,9 +53,9 @@ export default async function DashboardPage() {
     let weightDifference: number | null = null;
 
     try {
-        [measurements /*, weightGoal*/] = await Promise.all([
+        [measurements, weightGoal] = await Promise.all([
             getMeasurementsByUserId(user.id),
-            // getActiveGoalByUser(user.id),
+            getActiveGoalByUser(user.id),
         ]);
         currentWeight = getLatestWeight(measurements);
         weightDifference = getWeightDifference(currentWeight, weightGoal?.targetWeight ?? null);

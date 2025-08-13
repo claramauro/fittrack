@@ -1,7 +1,10 @@
 "use server";
 
+import { archiveGoal, createGoal, getAllActiveGoalsByUser } from "@/libs/server/database/weight_goal";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import { targetWeightSchema } from "@/libs/validation/weightGoal";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function createWeightGoal(formData: FormData) {
     const session = await getServerAuthSession();
@@ -11,5 +14,16 @@ export async function createWeightGoal(formData: FormData) {
     const targetWeight = Number(formData.get("targetWeight"));
 
     const targetWeightValidation = targetWeightSchema.safeParse({ targetWeight });
-    console.log(targetWeightValidation);
+
+    if (targetWeightValidation.error) {
+        // Server action si erreur ?
+    }
+
+    const activeGoals = await getAllActiveGoalsByUser(userId);
+    if (activeGoals.length > 0) {
+        await Promise.all(activeGoals.map((goal) => archiveGoal(goal.id)));
+    }
+    await createGoal(userId, targetWeight);
+    revalidatePath("/");
+    redirect("/");
 }
