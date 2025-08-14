@@ -3,8 +3,8 @@ import { Measurement } from "@/libs/types/measurement";
 
 export function mapMeasurementDbToMeasurement(measurementDb: MeasurementDb): Measurement {
     return {
-        id: measurementDb.id,
-        userId: measurementDb.user_id,
+        id: measurementDb.id.toString(),
+        userId: measurementDb.user_id.toString(),
         measuredAt: measurementDb.measured_at,
         weight: measurementDb.weight,
         chest: measurementDb.chest,

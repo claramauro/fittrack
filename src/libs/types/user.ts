@@ -1,5 +1,5 @@
 export type User = {
-    id: number;
+    id: string;
     email: string;
     password: string;
     firstname: string;
@@ -10,7 +10,7 @@ export type User = {
 };
 
 export type UserClient = {
-    id: number;
+    id: string;
     email: string;
     firstname: string;
     lastname: string;

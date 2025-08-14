@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendConfirmationRegisterEmail } from "@/libs/server/services/email";
 
 async function generateTokenAndSendMail(
-    id: number,
+    id: string,
     email: string,
     firstname: string,
     secret: Uint8Array<ArrayBufferLike>

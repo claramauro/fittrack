@@ -1,6 +1,6 @@
 export type Measurement = {
-    id: number;
-    userId: number;
+    id: string;
+    userId: string;
     measuredAt: Date;
     weight: number | string | null;
     chest: number | string | null;

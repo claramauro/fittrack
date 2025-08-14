@@ -22,10 +22,10 @@ export async function confirmationEmailController(req: NextRequest) {
 
         const user = await getUserByEmail(payload.email as string);
 
-        if (!user || Number(user.id) !== Number(payload.id)) {
+        if (!user || user.id !== payload.id) {
             throw new ValidationError("Token invalide");
         }
-        await verifyUser(Number(user.id));
+        await verifyUser(user.id);
         return NextResponse.redirect(new URL("/confirmation-email?status=success", req.nextUrl.origin));
     } catch (error) {
         console.log(error);
