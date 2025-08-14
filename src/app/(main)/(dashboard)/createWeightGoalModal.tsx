@@ -2,7 +2,6 @@
 
 import { createWeightGoal } from "@/app/actions/weightGoalActions";
 import Button from "@/ui/components/button";
-//import Button from "@/ui/components/button";
 import {
     Dialog,
     DialogClose,
@@ -35,7 +34,7 @@ export default function CreateWeightGoalModal() {
                     <Input type="number" name="targetWeight" id="targetWeight" min={0} step={0.1} />
                     <DialogFooter className="mt-6">
                         <DialogClose asChild>
-                            <Button type="button" outline={true}>
+                            <Button type="button" variant="outline">
                                 Annuler
                             </Button>
                         </DialogClose>

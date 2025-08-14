@@ -12,7 +12,6 @@ export default function Error({ reset }: { reset: () => void }) {
                 type="button"
                 className="mt-8"
                 onClick={() => {
-                    console.log("reset");
                     reset();
                 }}>
                 <RotateCcw className="size-5" /> Réessayer

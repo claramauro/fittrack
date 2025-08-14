@@ -48,9 +48,11 @@ export default function MeasurementsSection({ measurements }: { measurements: Me
                     )}
                 </div>
             )}
-            <Button className="block mx-auto">
-                <Link href={"/mesures"}>Voir toutes mes mesures</Link>
-            </Button>
+            <div className="text-center">
+                <Button asChild>
+                    <Link href={"/mesures"}>Voir toutes mes mesures</Link>
+                </Button>
+            </div>
         </div>
     );
 }

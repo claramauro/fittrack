@@ -73,7 +73,7 @@ export default function LoginForm() {
                 />
             </div>
             <div className="text-center !text-lg">
-                <Button type={"submit"} disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                     {!isLoading ? "Se connecter" : <Loader2Icon className="animate-spin" />}
                 </Button>
             </div>

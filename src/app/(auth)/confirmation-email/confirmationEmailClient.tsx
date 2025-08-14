@@ -92,7 +92,7 @@ export default function ConfirmationEmailClient({ status }: { status?: string })
                     <Label htmlFor="email">Email : </Label>
                     <Input id="email" name="email" type="text" placeholder="Adresse e-mail " />
                     {emailError && <p className="error-message">{emailError}</p>}
-                    <Button type={"submit"} disabled={isLoading}>
+                    <Button type="submit" disabled={isLoading}>
                         {!isLoading ? "Renvoyer un email" : <Loader2Icon className="animate-spin" />}
                     </Button>
                 </form>

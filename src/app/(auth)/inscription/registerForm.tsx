@@ -225,7 +225,7 @@ export default function RegisterForm() {
             </div>
             <div className="mr-auto text-gray-500 italic  text-sm">* champs requis</div>
             <div className="text-center !text-lg mt-2">
-                <Button type={"submit"} disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                     {!isLoading ? "S'inscrire" : <Loader2Icon className="animate-spin" />}
                 </Button>
             </div>

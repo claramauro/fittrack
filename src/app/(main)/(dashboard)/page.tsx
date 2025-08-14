@@ -8,7 +8,6 @@ import { Measurement } from "@/libs/types/measurement";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 import clsx from "clsx";
 import { PencilIcon } from "lucide-react";
-import CreateWeightGoalBtn from "./createWeightGoalBtn";
 import CreateWeightGoalModal from "./createWeightGoalModal";
 
 function getLatestWeight(measurements: Measurement[]) {
