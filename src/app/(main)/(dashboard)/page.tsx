@@ -7,8 +7,7 @@ import { getActiveGoalByUser } from "@/libs/server/database/weight_goal";
 import { Measurement } from "@/libs/types/measurement";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 import clsx from "clsx";
-import { PencilIcon } from "lucide-react";
-import CreateWeightGoalModal from "./createWeightGoalModal";
+import WeightGoalModal from "./weightGoalModal";
 
 function getLatestWeight(measurements: Measurement[]) {
     let latestWeight = null;
@@ -83,9 +82,7 @@ export default async function DashboardPage() {
                                 <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">
                                     Poids cible
                                 </h3>
-                                <button type="button" className="hover:cursor-pointer hover:scale-110">
-                                    <PencilIcon className="size-4.5 sm:size-5.5 text-gray-500" />
-                                </button>
+                                <WeightGoalModal mode="edit" initialValue={weightGoal.targetWeight.toString()} />
                             </div>
                         ) : (
                             <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">Poids cible</h3>
@@ -95,13 +92,13 @@ export default async function DashboardPage() {
                                 "flex-grow flex items-center justify-center",
                                 !weightGoal && "flex-col gap-1 sm:gap-4"
                             )}>
-                            {weightGoal ? (
+                            {weightGoal?.targetWeight ? (
                                 <p className="font-bold max-[530px]:text-lg min-[530px]:text-2xl md:text-3xl">
                                     {weightGoal.targetWeight} kg
                                 </p>
                             ) : (
                                 <>
-                                    <CreateWeightGoalModal />
+                                    <WeightGoalModal mode="create" />
                                     <p className="text-center text-sm sm:text-base -p-4">Aucun objectif défini</p>
                                 </>
                             )}

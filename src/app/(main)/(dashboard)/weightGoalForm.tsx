@@ -1,4 +1,4 @@
-import { createWeightGoal } from "@/app/actions/weightGoalActions";
+import { createWeightGoal, updateWeightGoal } from "@/app/actions/weightGoalActions";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
 import clsx from "clsx";
@@ -9,8 +9,18 @@ const initialState = {
     message: "",
 };
 
-export default function CreateWeightGoalForm({ children }: { children: (pending: boolean) => React.ReactNode }) {
-    const [state, formAction, pending] = useActionState(createWeightGoal, initialState);
+export default function WeightGoalForm({
+    children,
+    isEdit,
+    initialValue,
+}: {
+    children: (pending: boolean) => React.ReactNode;
+    isEdit: boolean;
+    initialValue?: string;
+}) {
+    const serverAction = isEdit ? updateWeightGoal : createWeightGoal;
+
+    const [state, formAction, pending] = useActionState(serverAction, initialState);
 
     return (
         <form action={formAction}>
@@ -21,7 +31,7 @@ export default function CreateWeightGoalForm({ children }: { children: (pending:
                 type="number"
                 name="targetWeight"
                 id="targetWeight"
-                placeholder="Poids cible"
+                defaultValue={initialValue ?? ""}
                 required
                 min={0}
                 step={0.1}

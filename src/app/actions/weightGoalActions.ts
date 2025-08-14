@@ -31,3 +31,8 @@ export async function createWeightGoal(initialState: ActionState, formData: Form
     revalidatePath("/");
     redirect("/");
 }
+
+export async function updateWeightGoal(initialState: ActionState, formData: FormData): Promise<ActionState> {
+    console.log(initialState, formData);
+    return { status: "", message: "" };
+}
