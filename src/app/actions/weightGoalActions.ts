@@ -6,9 +6,13 @@ import { targetWeightSchema } from "@/libs/validation/weightGoal";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createWeightGoal(formData: FormData) {
+type ActionState = { status: string; message: string };
+
+export async function createWeightGoal(initialState: ActionState, formData: FormData): Promise<ActionState> {
     const session = await getServerAuthSession();
-    if (!session || !session.user) throw new Error("Non authentifié");
+    if (!session || !session.user) {
+        redirect("/connexion");
+    }
     const userId = session.user.id;
 
     const targetWeight = Number(formData.get("targetWeight"));
@@ -16,7 +20,7 @@ export async function createWeightGoal(formData: FormData) {
     const targetWeightValidation = targetWeightSchema.safeParse({ targetWeight });
 
     if (targetWeightValidation.error) {
-        // Server action si erreur ?
+        return { status: "error", message: targetWeightValidation.error.issues[0].message };
     }
 
     const activeGoals = await getAllActiveGoalsByUser(userId);

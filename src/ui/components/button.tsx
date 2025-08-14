@@ -7,7 +7,11 @@ export default function Button({ className, ...props }: ButtonProps) {
     return (
         <ShadcnButton
             {...props}
-            className={cn("bg-main hover:bg-main hover:cursor-pointer hover:opacity-80 transition-all", className)}
+            className={cn(
+                "bg-main hover:bg-main hover:cursor-pointer hover:opacity-80 transition-all",
+                className,
+                props.variant === "outline" ? "bg-transparent hover:bg-transparent" : ""
+            )}
         />
     );
 }

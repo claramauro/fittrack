@@ -186,4 +186,12 @@
     .error-message {
         color: var(--destructive);
     }
+
+    .input {
+        @apply selection:bg-slate-400 focus-visible:ring-1 focus-visible:ring-main;
+    }
+
+    .input-error {
+        @apply ring-2 ring-destructive focus-visible:ring-destructive
+    }
 }

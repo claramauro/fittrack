@@ -49,27 +49,22 @@ export default function LoginForm() {
     return (
         <form action="" className="flex flex-col items-center mx-auto w-2/3 max-w-2xl" onSubmit={handleSubmit}>
             <div className="mb-6 w-full">
-                <Label htmlFor="email" className="mb-2 text-md">
+                <Label htmlFor="email" className="mb-2 text-base">
                     Email
                 </Label>
-                <Input
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="Adresse e-mail"
-                    className="focus-visible:ring-1 focus-visible:ring-main"
-                />
+                <Input type="text" name="email" id="email" placeholder="Adresse e-mail" required className="input" />
             </div>
             <div className="mb-6 w-full">
-                <Label htmlFor="password" className="mb-2 text-md">
+                <Label htmlFor="password" className="mb-2 text-base">
                     Mot de passe
                 </Label>
                 <Input
                     type="password"
                     name="password"
                     id="password"
+                    required
                     placeholder="Mot de passe"
-                    className="focus-visible:ring-1 focus-visible:ring-main"
+                    className="input"
                 />
             </div>
             <div className="text-center !text-lg">
