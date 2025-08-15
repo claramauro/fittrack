@@ -48,6 +48,7 @@
 :root {
     --main: var(--color-chart-2);
     --success: rgb(0, 147, 85);
+    --referenceLineChart: #999AC6;
     --radius: 0.625rem;
     --background: oklch(1 0 0);
     --foreground: oklch(0.141 0.005 285.823);

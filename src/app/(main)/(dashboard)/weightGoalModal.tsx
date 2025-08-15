@@ -13,7 +13,15 @@ import {
 import { Loader2Icon, PencilIcon, PlusIcon } from "lucide-react";
 import WeightGoalForm from "./weightGoalForm";
 
-export default function WeightGoalModal({ mode, initialValue }: { mode: "create" | "edit"; initialValue?: string }) {
+export default function WeightGoalModal({
+    mode,
+    initialValue,
+    weightGoalId,
+}: {
+    mode: "create" | "edit";
+    initialValue?: string;
+    weightGoalId?: string;
+}) {
     const isEdit = mode === "edit";
     return (
         <Dialog>
@@ -40,7 +48,7 @@ export default function WeightGoalModal({ mode, initialValue }: { mode: "create"
                 <DialogHeader className="mb-4">
                     <DialogTitle>{isEdit ? "Modifier l'objectif" : "Définir un nouvel objectif"}</DialogTitle>
                 </DialogHeader>
-                <WeightGoalForm isEdit={isEdit} initialValue={initialValue}>
+                <WeightGoalForm isEdit={isEdit} initialValue={initialValue} weightGoalId={weightGoalId}>
                     {(pending) => (
                         <DialogFooter className="mt-6">
                             <DialogClose asChild>

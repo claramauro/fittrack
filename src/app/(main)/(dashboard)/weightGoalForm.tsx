@@ -13,12 +13,14 @@ export default function WeightGoalForm({
     children,
     isEdit,
     initialValue,
+    weightGoalId,
 }: {
     children: (pending: boolean) => React.ReactNode;
     isEdit: boolean;
     initialValue?: string;
+    weightGoalId?: string;
 }) {
-    const serverAction = isEdit ? updateWeightGoal : createWeightGoal;
+    const serverAction = isEdit ? updateWeightGoal.bind(null, weightGoalId) : createWeightGoal;
 
     const [state, formAction, pending] = useActionState(serverAction, initialState);
 

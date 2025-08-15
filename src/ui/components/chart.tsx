@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "../shadcn/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "../shadcn/components/ui/chart";
 import { Measurement } from "@/libs/types/measurement";
@@ -16,7 +16,7 @@ function generateYTicks(min: number, max: number, step: number): number[] {
     return ticks;
 }
 
-export default function Chart({ measurements }: { measurements: Measurement[] }) {
+export default function Chart({ measurements, weightTarget }: { measurements: Measurement[]; weightTarget?: number }) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const [isScrollable, setIsScrollable] = useState(false);
 
@@ -111,6 +111,7 @@ export default function Chart({ measurements }: { measurements: Measurement[] })
                         margin={{
                             top: 0,
                             bottom: 0,
+                            left: 1,
                             right: -30,
                         }}>
                         <CartesianGrid vertical={false} />
@@ -125,6 +126,19 @@ export default function Chart({ measurements }: { measurements: Measurement[] })
                             ticks={yTicks}
                             orientation="left"
                         />
+                        {weightTarget && (
+                            <ReferenceLine
+                                y={weightTarget}
+                                yAxisId="left"
+                                stroke="var(--referenceLineChart)"
+                                label={{
+                                    value: "objectif",
+                                    position: "insideBottomRight",
+                                    fill: "var(--referenceLineChart)",
+                                }}
+                            />
+                        )}
+
                         <YAxis
                             yAxisId="right"
                             className={clsx(!isScrollable && "hidden")}
@@ -137,7 +151,7 @@ export default function Chart({ measurements }: { measurements: Measurement[] })
                             orientation="right"
                         />
                         <ChartTooltip
-                            cursor={false}
+                            cursor={true}
                             content={<ChartTooltipContent hideLabel valueFormatter={(value) => `${value} kg`} />}
                         />
                         <Line

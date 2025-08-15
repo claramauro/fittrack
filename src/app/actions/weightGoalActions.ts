@@ -1,6 +1,13 @@
 "use server";
 
-import { archiveGoal, createGoal, getAllActiveGoalsByUser } from "@/libs/server/database/weight_goal";
+import {
+    archiveGoal,
+    createGoal,
+    getAllActiveGoalsByUser,
+    getGoalById,
+    updateGoal,
+} from "@/libs/server/database/weight_goal";
+import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import { targetWeightSchema } from "@/libs/validation/weightGoal";
 import { revalidatePath } from "next/cache";
@@ -14,25 +21,71 @@ export async function createWeightGoal(initialState: ActionState, formData: Form
         redirect("/connexion");
     }
     const userId = session.user.id;
+    try {
+        const targetWeight = Number(formData.get("targetWeight"));
+        const targetWeightValidation = targetWeightSchema.safeParse({ targetWeight });
+        if (targetWeightValidation.error) {
+            throw new ValidationError(targetWeightValidation.error.issues[0].message);
+        }
 
-    const targetWeight = Number(formData.get("targetWeight"));
-
-    const targetWeightValidation = targetWeightSchema.safeParse({ targetWeight });
-
-    if (targetWeightValidation.error) {
-        return { status: "error", message: targetWeightValidation.error.issues[0].message };
+        const activeGoals = await getAllActiveGoalsByUser(userId);
+        if (activeGoals.length > 0) {
+            await Promise.all(activeGoals.map((goal) => archiveGoal(goal.id)));
+        }
+        await createGoal(userId, targetWeight);
+        revalidatePath("/");
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+        return {
+            status: "error",
+            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+        };
     }
-
-    const activeGoals = await getAllActiveGoalsByUser(userId);
-    if (activeGoals.length > 0) {
-        await Promise.all(activeGoals.map((goal) => archiveGoal(goal.id)));
-    }
-    await createGoal(userId, targetWeight);
-    revalidatePath("/");
     redirect("/");
 }
 
-export async function updateWeightGoal(initialState: ActionState, formData: FormData): Promise<ActionState> {
-    console.log(initialState, formData);
-    return { status: "", message: "" };
+export async function updateWeightGoal(
+    weightGoalId: string | undefined,
+    initialState: ActionState,
+    formData: FormData
+): Promise<ActionState> {
+    const session = await getServerAuthSession();
+    if (!session || !session.user) {
+        redirect("/connexion");
+    }
+    const userId = session.user.id.toString();
+    try {
+        if (!weightGoalId) {
+            throw new Error("weightGoalId is missing");
+        }
+
+        const targetWeight = Number(formData.get("targetWeight"));
+        const targetWeightValidation = targetWeightSchema.safeParse({ targetWeight });
+
+        if (targetWeightValidation.error) {
+            throw new ValidationError(targetWeightValidation.error.issues[0].message);
+        }
+
+        const weightGoalToUpdate = await getGoalById(weightGoalId);
+        if (!weightGoalToUpdate) {
+            throw new Error("No goals with this ID");
+        }
+        if (weightGoalToUpdate.userId !== userId) {
+            console.error("Unauthorized: The goal does not belong to this user");
+            throw new Error("Unauthorized: The goal does not belong to this user");
+        }
+        await updateGoal(weightGoalId, targetWeight);
+        revalidatePath("/");
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+        return {
+            status: "error",
+            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+        };
+    }
+    redirect("/");
 }

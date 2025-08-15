@@ -82,7 +82,11 @@ export default async function DashboardPage() {
                                 <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">
                                     Poids cible
                                 </h3>
-                                <WeightGoalModal mode="edit" initialValue={weightGoal.targetWeight.toString()} />
+                                <WeightGoalModal
+                                    mode="edit"
+                                    initialValue={weightGoal.targetWeight.toString()}
+                                    weightGoalId={weightGoal.id}
+                                />
                             </div>
                         ) : (
                             <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">Poids cible</h3>
@@ -120,7 +124,7 @@ export default async function DashboardPage() {
                 </div>
             </div>
             <div className="mb-10">
-                <Chart measurements={measurements} />
+                <Chart measurements={measurements} weightTarget={Number(weightGoal?.targetWeight)} />
             </div>
             <MeasurementsSection measurements={measurements} />
         </div>

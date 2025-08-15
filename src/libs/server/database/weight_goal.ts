@@ -4,6 +4,15 @@ import { pool } from "./connection";
 import { mapWeightGoalDbToWeightGoal } from "../mappers/weightGoalMapper";
 import { WeightGoalDb } from "@/libs/types/db/weightGoal";
 
+export async function getGoalById(id: string): Promise<WeightGoal | null> {
+    const [rows] = await pool.query<RowDataPacket[]>("SELECT * FROM weight_goal WHERE id = ?", [id]);
+    const goal = rows[0] as WeightGoalDb;
+    if (!goal) {
+        return null;
+    }
+    return mapWeightGoalDbToWeightGoal(goal);
+}
+
 export async function getActiveGoalByUser(userId: string): Promise<WeightGoal | null> {
     const [rows] = await pool.query<RowDataPacket[]>(
         "SELECT * FROM weight_goal WHERE user_id = ? and status = 'active' ORDER BY created_at ASC",
@@ -37,4 +46,8 @@ export async function createGoal(userId: string, targetWeight: number) {
         userId,
         targetWeight,
     ]);
+}
+
+export async function updateGoal(id: string, targetWeight: number) {
+    await pool.query<ResultSetHeader>("UPDATE weight_goal SET target_weight = ? WHERE id = ?", [targetWeight, id]);
 }
