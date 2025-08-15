@@ -89,3 +89,8 @@ export async function updateWeightGoal(
     }
     redirect("/");
 }
+export async function archiveWeightGoal(
+    weightGoalId: string | undefined,
+    initialState: ActionState,
+    formData: FormData
+): Promise<ActionState> {}

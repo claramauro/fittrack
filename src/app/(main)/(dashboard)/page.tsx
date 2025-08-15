@@ -8,6 +8,7 @@ import { Measurement } from "@/libs/types/measurement";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 import clsx from "clsx";
 import WeightGoalModal from "./weightGoalModal";
+import WeightGoalDeleteModal from "./weightGoalDeleteModal";
 
 function getLatestWeight(measurements: Measurement[]) {
     let latestWeight = null;
@@ -78,15 +79,19 @@ export default async function DashboardPage() {
                 <div className="border border-zinc-200 rounded-md shadow-sm flex flex-col w-[130px] h-[130px] min-[530px]:w-auto min-[530px]:h-auto aspect-square min-[500px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/5">
                     <div className="p-4 md:p-6 flex flex-col h-full">
                         {weightGoal?.targetWeight ? (
-                            <div className="flex justify-between gap-2">
+                            <div className="flex justify-between items-start gap-2">
                                 <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">
                                     Poids cible
                                 </h3>
-                                <WeightGoalModal
-                                    mode="edit"
-                                    initialValue={weightGoal.targetWeight.toString()}
-                                    weightGoalId={weightGoal.id}
-                                />
+                                <div className="flex gap-1">
+                                    <WeightGoalModal
+                                        mode="edit"
+                                        initialValue={weightGoal.targetWeight.toString()}
+                                        weightGoalId={weightGoal.id}
+                                    />
+
+                                    <WeightGoalDeleteModal weightGoalId={weightGoal.id} />
+                                </div>
                             </div>
                         ) : (
                             <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">Poids cible</h3>
