@@ -2,11 +2,11 @@ import { getMeasurementsByUserId } from "@/libs/server/database/measurement";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import Chart from "@/ui/components/chart";
 import { redirect } from "next/navigation";
-import MeasurementsSection from "./measurementsDetailsSection";
 import { getActiveGoalByUser } from "@/libs/server/database/weight_goal";
 import { Measurement } from "@/libs/types/measurement";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 import WeightSummarySection from "./WeightSummarySection";
+import MeasurementsDetailsSection from "./measurementsDetailsSection";
 
 function getLatestWeight(measurements: Measurement[]) {
     for (let i = 0; i < measurements.length; i++) {
@@ -45,6 +45,8 @@ export default async function DashboardPage() {
         ]);
         currentWeight = getLatestWeight(measurements);
         weightDifference = getWeightDifference(currentWeight, weightGoal?.targetWeight ?? null);
+        console.log(weightGoal?.targetWeight);
+        console.log(measurements[0]);
     } catch {
         throw new Error("Une erreur est survenue, veuillez recharger la page.");
     }
@@ -60,9 +62,9 @@ export default async function DashboardPage() {
                 weightDifference={weightDifference}
             />
             <div className="mb-10">
-                <Chart measurements={measurements} weightTarget={Number(weightGoal?.targetWeight)} />
+                <Chart measurements={measurements} weightTarget={weightGoal?.targetWeight} />
             </div>
-            <MeasurementsSection measurements={measurements} />
+            <MeasurementsDetailsSection measurements={measurements} targetWeight={weightGoal?.targetWeight} />
         </div>
     );
 }
