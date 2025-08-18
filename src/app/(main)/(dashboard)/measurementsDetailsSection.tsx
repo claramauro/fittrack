@@ -4,7 +4,7 @@ import MeasurementsDetails from "@/ui/components/measurementsDetails";
 import clsx from "clsx";
 import Link from "next/link";
 
-export default function MeasurementsSection({ measurements }: { measurements: Measurement[] }) {
+export default function MeasurementsDetailsSection({ measurements }: { measurements: Measurement[] }) {
     return (
         <div className="mx-auto max-w-[calc(370px*2+1.5rem)] xl:max-w-[calc(450px*2+1.5rem)]">
             <h2 className="mb-2 font-poppins text-lg font-bold">Mes dernières mesures</h2>

@@ -5,7 +5,7 @@ export enum GoalStatus {
 export type WeightGoal = {
     id: string;
     userId: string;
-    targetWeight: number | string;
+    targetWeight: number;
     status: GoalStatus;
     createdAt: Date;
     updatedAt: Date | null;

@@ -5,7 +5,7 @@ export function mapWeightGoalDbToWeightGoal(weightGoalDb: WeightGoalDb): WeightG
     return {
         id: weightGoalDb.id.toString(),
         userId: weightGoalDb.user_id.toString(),
-        targetWeight: weightGoalDb.target_weight,
+        targetWeight: Number(weightGoalDb.target_weight),
         status: weightGoalDb.status,
         createdAt: weightGoalDb.created_at,
         updatedAt: weightGoalDb.updated_at,
