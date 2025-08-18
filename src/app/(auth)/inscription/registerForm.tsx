@@ -113,7 +113,7 @@ export default function RegisterForm() {
                     setFormDataErrors({ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" });
                 }
             } else {
-                setFormError("Erreur inconnue, veuillez réessayer");
+                setFormError("Une erreur est survenue, veuillez réessayer");
             }
         } finally {
             setIsLoading(false);
@@ -123,7 +123,7 @@ export default function RegisterForm() {
     return (
         <form action="" onSubmit={handleSubmit} className="flex flex-col items-center mx-auto w-2/3 max-w-2xl">
             <div className="mb-4 w-full">
-                <Label htmlFor="firstname" className="mb-2 text-md">
+                <Label htmlFor="firstname" className="mb-2 text-base">
                     Prénom
                     <span>*</span>
                 </Label>
@@ -132,17 +132,15 @@ export default function RegisterForm() {
                     name="firstname"
                     id="firstname"
                     placeholder="Prénom"
-                    className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main",
-                        formDataErrors?.firstname && "ring-2 ring-destructive focus-visible:ring-destructive"
-                    )}
+                    required
+                    className={clsx("input", formDataErrors?.firstname && "input-error")}
                     onChange={handleChange}
                     value={formData.firstname}
                 />
                 <div className="error-message mt-1">{formDataErrors?.firstname && formDataErrors?.firstname}</div>
             </div>
             <div className="mb-4 w-full">
-                <Label htmlFor="lastname" className="mb-2 text-md">
+                <Label htmlFor="lastname" className="mb-2 text-base">
                     Nom
                     <span>*</span>
                 </Label>
@@ -151,17 +149,15 @@ export default function RegisterForm() {
                     name="lastname"
                     id="lastname"
                     placeholder="Nom de famille"
-                    className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main",
-                        formDataErrors?.lastname && "ring-2 ring-destructive focus-visible:ring-destructive"
-                    )}
+                    required
+                    className={clsx("input", formDataErrors?.lastname && "input-error")}
                     onChange={handleChange}
                     value={formData.lastname}
                 />
                 <div className="error-message mt-1">{formDataErrors?.lastname && formDataErrors?.lastname}</div>
             </div>
             <div className="mb-4 w-full">
-                <Label htmlFor="email" className="mb-2 text-md">
+                <Label htmlFor="email" className="mb-2 text-base">
                     Email
                     <span>*</span>
                 </Label>
@@ -170,17 +166,15 @@ export default function RegisterForm() {
                     name="email"
                     id="email"
                     placeholder="Adresse e-mail"
-                    className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main",
-                        formDataErrors?.email && "ring-2 ring-destructive focus-visible:ring-destructive"
-                    )}
+                    required
+                    className={clsx("input", formDataErrors?.email && "input-error")}
                     onChange={handleChange}
                     value={formData.email}
                 />
                 <div className="error-message mt-1">{formDataErrors?.email && formDataErrors?.email}</div>
             </div>
             <div className="mb-4 w-full">
-                <Label htmlFor="password" className="mb-2 text-md">
+                <Label htmlFor="password" className="mb-2 text-base">
                     Mot de passe
                     <span>*</span>
                 </Label>
@@ -189,10 +183,8 @@ export default function RegisterForm() {
                     name="password"
                     id="password"
                     placeholder="Mot de passe"
-                    className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main",
-                        formDataErrors?.password && "ring-2 ring-destructive focus-visible:ring-destructive"
-                    )}
+                    required
+                    className={clsx("input", formDataErrors?.password && "input-error")}
                     onChange={handleChange}
                     value={formData.password}
                 />
@@ -202,7 +194,7 @@ export default function RegisterForm() {
                 <div className="error-message mt-1">{formDataErrors?.password && formDataErrors?.password}</div>
             </div>
             <div className="mb-4 w-full">
-                <Label htmlFor="confirmPassword" className="mb-2 text-md">
+                <Label htmlFor="confirmPassword" className="mb-2 text-base">
                     Confirmation du mot de passe
                     <span>*</span>
                 </Label>
@@ -211,10 +203,8 @@ export default function RegisterForm() {
                     name="confirmPassword"
                     id="confirmPassword"
                     placeholder="Confirmer votre mot de passe"
-                    className={clsx(
-                        "focus-visible:ring-1 focus-visible:ring-main",
-                        formDataErrors?.confirmPassword && "ring-2 ring-destructive focus-visible:ring-destructive"
-                    )}
+                    required
+                    className={clsx("input", formDataErrors?.confirmPassword && "input-error")}
                     onChange={handleChange}
                     value={formData.confirmPassword}
                 />
@@ -225,7 +215,7 @@ export default function RegisterForm() {
             </div>
             <div className="mr-auto text-gray-500 italic  text-sm">* champs requis</div>
             <div className="text-center !text-lg mt-2">
-                <Button type={"submit"} disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                     {!isLoading ? "S'inscrire" : <Loader2Icon className="animate-spin" />}
                 </Button>
             </div>

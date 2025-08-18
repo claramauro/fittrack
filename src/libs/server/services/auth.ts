@@ -1,30 +1,34 @@
 import { compare, hash } from "bcrypt-ts";
-import { JWTPayload, jwtVerify, SignJWT } from "jose";
 import { getUserByEmail } from "../database/user";
-import { AuthorizationError, ValidationError } from "../errors/customErrors";
 import { genSalt } from "bcrypt-ts/browser";
+import { JWTPayload, jwtVerify, SignJWT } from "jose";
+import { JWTExpired } from "jose/errors";
+import { AuthorizationError } from "../errors/customErrors";
 
 export async function authenticateUser(email: string, password: string) {
     const user = await getUserByEmail(email);
-    if (!user) {
-        throw new ValidationError("Email ou mot de passe invalide");
-    }
+    if (!user) return null;
 
     const passwordMatch = await compare(password, user.password);
-    if (!passwordMatch) {
-        throw new ValidationError("Email ou mot de passe invalide");
-    }
+    if (!passwordMatch) return null;
 
-    if (!user.isVerified) {
-        throw new AuthorizationError(
-            "Votre compte n’est pas encore activé. Veuillez vérifier votre adresse email pour finaliser votre inscription"
-        );
-    }
-    return user;
+    if (!user.isVerified) return null;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...userWithoutPassword } = user;
+    return userWithoutPassword;
 }
 
-export async function generateToken(payload: JWTPayload, exp: string): Promise<string> {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+export async function hashPassword(password: string) {
+    const salt = await genSalt(10);
+    return hash(password, salt);
+}
+
+export async function generateToken(
+    payload: JWTPayload,
+    exp: string,
+    secret: Uint8Array<ArrayBufferLike>
+): Promise<string> {
     const alg = "HS256";
     const jwt = await new SignJWT(payload)
         .setProtectedHeader({ alg })
@@ -35,24 +39,18 @@ export async function generateToken(payload: JWTPayload, exp: string): Promise<s
     return jwt;
 }
 
-export async function checkToken(token: string): Promise<JWTPayload> {
-    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
-    if (!secret) {
-        throw new Error("JWT_SECRET is not defined");
-    }
+export async function verifyAndDecodeToken(token: string, secret: Uint8Array<ArrayBufferLike>): Promise<JWTPayload> {
     try {
         const { payload } = await jwtVerify(token, secret);
+        if (!payload) {
+            throw new AuthorizationError("Token invalide", 401);
+        }
         return payload;
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.log(error);
-        if (error.code === "ERR_JWT_EXPIRED") {
+        if (error instanceof JWTExpired && error.code === "ERR_JWT_EXPIRED") {
             throw new AuthorizationError("Token expiré", 401);
         }
-        throw new Error(error.message);
+        throw new Error(error instanceof Error ? error.message : "Erreur interne, veuillez réessayer.");
     }
-}
-
-export async function hashPassword(password: string) {
-    const salt = await genSalt(10);
-    return hash(password, salt);
 }

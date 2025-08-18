@@ -1,26 +1,17 @@
+import { cn } from "@/libs/utils";
 import { Button as ShadcnButton } from "@/ui/shadcn/components/ui/button";
 
-export default function Button({
-    children,
-    type = "button",
-    asChild,
-    disabled,
-    onClick,
-}: {
-    children: React.ReactNode;
-    type?: "button" | "submit";
-    asChild?: boolean;
-    disabled?: boolean;
-    onClick?: React.MouseEventHandler<HTMLButtonElement>;
-}) {
+type ButtonProps = React.ComponentProps<typeof ShadcnButton>;
+
+export default function Button({ className, ...props }: ButtonProps) {
     return (
         <ShadcnButton
-            asChild={asChild ? true : false}
-            className="bg-main hover:bg-main hover:opacity-80 transition-all"
-            type={type}
-            disabled={disabled}
-            onClick={onClick}>
-            {children}
-        </ShadcnButton>
+            {...props}
+            className={cn(
+                "bg-main hover:bg-main hover:cursor-pointer hover:opacity-80 transition-all",
+                className,
+                props.variant === "outline" ? "bg-transparent hover:bg-transparent" : ""
+            )}
+        />
     );
 }

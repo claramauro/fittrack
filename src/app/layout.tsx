@@ -8,7 +8,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${raleway.variable} ${poppins.variable}`}>{children}</body>
+            <body className={`min-h-screen flex flex-col ${raleway.variable} ${poppins.variable}`}>{children}</body>
         </html>
     );
 }

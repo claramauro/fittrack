@@ -18,14 +18,26 @@ export async function createUser(data: {
     lastname: string;
     email: string;
     password: string;
-}): Promise<number> {
+}): Promise<string> {
     const [rows] = await pool.query<ResultSetHeader>(
         "INSERT INTO user (firstname, lastname, email, password) VALUES (?, ?, ?, ?)",
         [data.firstname, data.lastname, data.email, data.password]
     );
-    return rows.insertId;
+    return rows.insertId.toString();
 }
 
-export async function verifyUser(id: number) {
-    await pool.query<ResultSetHeader>("UPDATE user SET is_verified = true WHERE id = ?", [id]);
+export async function verifyUser(userId: string) {
+    await pool.query<ResultSetHeader>("UPDATE user SET is_verified = true WHERE id = ?", [userId]);
+}
+
+export async function updateUser(data: {
+    id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    password: string;
+}) {
+    const query = "UPDATE user SET firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?";
+    const params = [data.firstname, data.lastname, data.email, data.password, data.id];
+    await pool.query<ResultSetHeader>(query, params);
 }

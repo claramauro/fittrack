@@ -3,7 +3,7 @@ import { User } from "@/libs/types/user";
 
 export function mapUserDbToUser(userDb: UserDb): User {
     return {
-        id: userDb.id,
+        id: userDb.id.toString(),
         email: userDb.email,
         password: userDb.password,
         firstname: userDb.firstname,

@@ -9,5 +9,6 @@ const pool = mysql.createPool({
     waitForConnections: true,
     queueLimit: 0,
 });
+console.log("Pool MySQL initialisé");
 
 export { pool };

@@ -1,0 +1,12 @@
+export enum GoalStatus {
+    ACTIVE = "ACTIVE",
+    ARCHIVED = "ARCHIVED",
+}
+export type WeightGoal = {
+    id: string;
+    userId: string;
+    targetWeight: number;
+    status: GoalStatus;
+    createdAt: Date;
+    updatedAt: Date | null;
+};

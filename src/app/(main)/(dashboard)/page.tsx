@@ -1,104 +1,68 @@
-import Button from "@/ui/components/button";
+import { getMeasurementsByUserId } from "@/libs/server/database/measurement";
+import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import Chart from "@/ui/components/chart";
-import Link from "next/link";
+import { redirect } from "next/navigation";
+import MeasurementsSection from "./measurementsDetailsSection";
+import { getActiveGoalByUser } from "@/libs/server/database/weight_goal";
+import { Measurement } from "@/libs/types/measurement";
+import { WeightGoal } from "@/libs/types/weigthGoal";
+import WeightSummarySection from "./WeightSummarySection";
 
-export default function Dashboard() {
+function getLatestWeight(measurements: Measurement[]) {
+    for (let i = 0; i < measurements.length; i++) {
+        const weight = measurements[i]?.weight;
+        if (weight !== null && weight !== undefined) {
+            return weight;
+        }
+    }
+    return null;
+}
+
+function getWeightDifference(currentWeight: number | null, weightTarget: number | null): number | null {
+    if (currentWeight === null || weightTarget === null) {
+        return null;
+    }
+    const difference = currentWeight - weightTarget;
+    return Number(difference.toFixed(2));
+}
+
+export default async function DashboardPage() {
+    const session = await getServerAuthSession();
+    if (!session || !session.user) {
+        redirect("/connexion");
+    }
+    const user = session.user;
+
+    let measurements: Measurement[] = [];
+    let weightGoal: WeightGoal | null = null;
+    let currentWeight = null;
+    let weightDifference: number | null = null;
+
+    try {
+        [measurements, weightGoal] = await Promise.all([
+            getMeasurementsByUserId(user.id),
+            getActiveGoalByUser(user.id),
+        ]);
+        currentWeight = getLatestWeight(measurements);
+        weightDifference = getWeightDifference(currentWeight, weightGoal?.targetWeight ?? null);
+    } catch {
+        throw new Error("Une erreur est survenue, veuillez recharger la page.");
+    }
+
     return (
         <div className="pt-10">
-            <h1 className="mb-10 text-4xl font-poppins font-medium">Hello Clara !</h1>
-            <div className="mb-10 flex gap-6 flex-wrap justify-center min-[520px]:flex-nowrap">
-                <div className="border border-zinc-200 rounded-md shadow-sm p-6 aspect-square flex flex-col basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/6">
-                    <h3 className="text-center sm:text-left sm:text-lg">Poids actuel</h3>
-                    <div className="flex-grow flex items-center justify-center font-bold max-[520px]:text-xl text-3xl sm:text-4xl">
-                        67 kg
-                    </div>
-                </div>
-                <div className="border border-zinc-200 rounded-md shadow-sm p-6 aspect-square flex flex-col basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/6">
-                    <h3 className="text-center sm:text-left sm:text-lg">Poids cible</h3>
-                    <div className="flex-grow flex items-center justify-center font-bold max-[520px]:text-xl text-3xl sm:text-4xl">
-                        60 kg
-                    </div>
-                </div>
-                <div className="border border-zinc-200 rounded-md shadow-sm p-6 aspect-square flex flex-col basis-[calc(50%-0.75rem)] sm:basis-1/3 lg:basis-1/6">
-                    <h3 className="text-center sm:text-left sm:text-lg">Écart</h3>
-                    <div className="flex-grow flex items-center justify-center font-bold max-[520px]:text-xl text-3xl sm:text-4xl">
-                        + 7 kg
-                    </div>
-                </div>
-            </div>
+            <h1 className="mb-10 text-4xl font-poppins font-medium mx-auto max-w-[calc(370px*2+1.5rem)] xl:max-w-[calc(450px*2+1.5rem)]">
+                Hello {user?.firstname} !
+            </h1>
+            <WeightSummarySection
+                currentWeight={currentWeight}
+                weightGoal={weightGoal}
+                weightDifference={weightDifference}
+            />
             <div className="mb-10">
-                <Chart />
+                <Chart measurements={measurements} weightTarget={Number(weightGoal?.targetWeight)} />
             </div>
-            <div className=" max-w-6xl mx-auto">
-                <h2 className="mb-2 font-poppins text-lg font-bold">Mes dernières mesures</h2>
-                <div className="min-[600px]:flex gap-6 mb-6">
-                    <div className="w-full min-[600px]:w-1/2">
-                        <div className="mb-1 text-sm text-right">01/07/2025</div>
-                        <div className="border border-zinc-200 p-4 rounded-md shadow-sm">
-                            <div className="grid grid-cols-3 min-[600px]:grid-cols-[auto_auto_auto] gap-3">
-                                <div>Poitrine</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Sous poitrine</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Taille</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Ventre</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Fesses</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Cuisse</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Bras</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Poids</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-full min-[600px]:w-1/2">
-                        <div className="mb-1 text-sm text-right">01/06/2025</div>
-                        <div className="border border-zinc-200 p-4 rounded-md shadow-sm">
-                            <div className="grid grid-cols-3 min-[600px]:grid-cols-[auto_auto_auto] gap-3">
-                                <div>Poitrine</div>
-                                <div className="text-center">86cm</div>
-                                <div className="text-center">- 12 cm</div>
-                                <div>Sous poitrine</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Taille</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Ventre</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Fesses</div>
-                                <div className="text-center">105cm</div>
-                                <div className="text-center">-</div>
-                                <div>Cuisse</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Bras</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                                <div>Poids</div>
-                                <div className="text-center">80cm</div>
-                                <div className="text-center">-</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <Button>
-                    <Link href={"/mesures"}>Voir l&apos;historique</Link>
-                </Button>
-            </div>
+            <MeasurementsSection measurements={measurements} />
         </div>
     );
 }
