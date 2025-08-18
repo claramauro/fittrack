@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 
 type ActionState = { status: string; message: string };
 
-export async function createWeightGoal(initialState: ActionState, formData: FormData): Promise<ActionState> {
+export async function createWeightGoal(_initialState: ActionState, formData: FormData): Promise<ActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -48,7 +48,7 @@ export async function createWeightGoal(initialState: ActionState, formData: Form
 
 export async function updateWeightGoal(
     weightGoalId: string | undefined,
-    initialState: ActionState,
+    _initialState: ActionState,
     formData: FormData
 ): Promise<ActionState> {
     const session = await getServerAuthSession();
@@ -91,6 +91,36 @@ export async function updateWeightGoal(
 }
 export async function archiveWeightGoal(
     weightGoalId: string | undefined,
-    initialState: ActionState,
-    formData: FormData
-): Promise<ActionState> {}
+    _initialState: ActionState,
+    _formData: FormData
+): Promise<ActionState> {
+    const session = await getServerAuthSession();
+    if (!session || !session.user) {
+        redirect("/connexion");
+    }
+    const userId = session.user.id.toString();
+    try {
+        if (!weightGoalId) {
+            throw new Error("weightGoalId is missing");
+        }
+        const weightGoalToArchive = await getGoalById(weightGoalId);
+        if (!weightGoalToArchive) {
+            throw new Error("No goals with this ID");
+        }
+        if (weightGoalToArchive.userId !== userId) {
+            console.error("Unauthorized: The goal does not belong to this user");
+            throw new Error("Unauthorized: The goal does not belong to this user");
+        }
+        await archiveGoal(weightGoalId);
+        revalidatePath("/");
+    } catch (error) {
+        if (error instanceof Error) {
+            console.error(error.message);
+        }
+        return {
+            status: "error",
+            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+        };
+    }
+    redirect("/");
+}
