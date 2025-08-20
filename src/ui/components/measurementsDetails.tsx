@@ -14,33 +14,19 @@ const measurementFields = [
 
 export default function MeasurementsDetails({
     measurement,
-    targetWeight,
+    isLooseWeightGoal = null,
+    showDifference,
     previousMeasurement,
 }: {
     measurement: Measurement;
-    targetWeight?: number;
+    isLooseWeightGoal: boolean | null;
+    showDifference: boolean;
     previousMeasurement?: Measurement;
 }) {
-    console.log("mesure", measurement.weight);
-    console.log("cible", targetWeight);
-
-    let isLooseWeightGoal: boolean | null = null;
-    if (
-        targetWeight !== null &&
-        targetWeight !== undefined &&
-        measurement.weight !== null &&
-        measurement.weight !== undefined
-    ) {
-        console.log("condition OK");
-        isLooseWeightGoal = measurement.weight > targetWeight;
-    }
-
     function formatMeasurementDifference(
         current: number,
         previous: number
     ): { formatted: string; color: string | null } {
-        // console.log(isLooseWeightGoal);
-
         const difference = current - previous;
         if (difference === 0) {
             return {
@@ -83,8 +69,9 @@ export default function MeasurementsDetails({
                     displayValue = `${value} ${item.unit}`;
                 }
 
-                let difference: { formatted: string; color: string | null } = { formatted: "", color: null };
+                let difference: { formatted: string; color: string | null } | null = null;
                 if (
+                    showDifference &&
                     previousMeasurement &&
                     typeof value === "number" &&
                     value !== null &&
@@ -97,11 +84,18 @@ export default function MeasurementsDetails({
                     <li key={item.name} className="contents">
                         <h3>{item.label}</h3>
                         <span className="text-right">{displayValue}</span>
-                        {previousMeasurement && (
-                            <span className={clsx("text-right", difference.color ? difference.color : "text-inherit")}>
-                                {difference.formatted} {item.unit}
-                            </span>
-                        )}
+                        {showDifference &&
+                            (difference !== null ? (
+                                <span
+                                    className={clsx(
+                                        "text-right",
+                                        difference.color ? difference.color : "text-inherit"
+                                    )}>
+                                    {difference.formatted} {item.unit}
+                                </span>
+                            ) : (
+                                <span className="text-right">-</span>
+                            ))}
                     </li>
                 );
             })}
