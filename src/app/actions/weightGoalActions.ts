@@ -9,7 +9,7 @@ import {
 } from "@/libs/server/database/weight_goal";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
-import { targetWeightSchema } from "@/libs/validation/weightGoal";
+import { targetWeightSchema } from "@/libs/validation/weightGoalSchema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 

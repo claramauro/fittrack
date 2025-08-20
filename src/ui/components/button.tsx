@@ -1,4 +1,4 @@
-import { cn } from "@/libs/utils";
+import { cn } from "@/ui/shadcn/utils";
 import { Button as ShadcnButton } from "@/ui/shadcn/components/ui/button";
 
 type ButtonProps = React.ComponentProps<typeof ShadcnButton>;
