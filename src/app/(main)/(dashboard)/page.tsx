@@ -35,8 +35,9 @@ export default async function DashboardPage() {
 
     let measurements: Measurement[] = [];
     let weightGoal: WeightGoal | null = null;
-    let currentWeight = null;
+    let currentWeight: number | null = null;
     let weightDifference: number | null = null;
+    let isLooseWeightGoal: boolean | null = null;
 
     try {
         [measurements, weightGoal] = await Promise.all([
@@ -45,8 +46,9 @@ export default async function DashboardPage() {
         ]);
         currentWeight = getLatestWeight(measurements);
         weightDifference = getWeightDifference(currentWeight, weightGoal?.targetWeight ?? null);
-        console.log(weightGoal?.targetWeight);
-        console.log(measurements[0]);
+        if (currentWeight && weightGoal?.targetWeight) {
+            isLooseWeightGoal = currentWeight > weightGoal.targetWeight;
+        }
     } catch {
         throw new Error("Une erreur est survenue, veuillez recharger la page.");
     }
@@ -64,7 +66,7 @@ export default async function DashboardPage() {
             <div className="mb-10">
                 <Chart measurements={measurements} weightTarget={weightGoal?.targetWeight} />
             </div>
-            <MeasurementsDetailsSection measurements={measurements} targetWeight={weightGoal?.targetWeight} />
+            <MeasurementsDetailsSection measurements={measurements} isLooseWeightGoal={isLooseWeightGoal} />
         </div>
     );
 }

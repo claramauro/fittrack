@@ -27,8 +27,6 @@ export default function LoginForm() {
                 email,
                 password,
             });
-            console.log(response);
-
             if (response?.error) {
                 setIsLoading(false);
                 if (response.error === "CredentialsSignin") {

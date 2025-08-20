@@ -6,10 +6,10 @@ import Link from "next/link";
 
 export default function MeasurementsDetailsSection({
     measurements,
-    targetWeight,
+    isLooseWeightGoal = null,
 }: {
     measurements: Measurement[];
-    targetWeight?: number;
+    isLooseWeightGoal: boolean | null;
 }) {
     return (
         <div className="mx-auto max-w-[calc(370px*2+1.5rem)] xl:max-w-[calc(450px*2+1.5rem)]">
@@ -32,7 +32,8 @@ export default function MeasurementsDetailsSection({
                             <MeasurementsDetails
                                 measurement={measurements[0]}
                                 previousMeasurement={measurements.length > 0 ? measurements[1] : undefined}
-                                targetWeight={targetWeight}
+                                isLooseWeightGoal={isLooseWeightGoal}
+                                showDifference={true}
                             />
                         </div>
                     </div>
@@ -49,7 +50,11 @@ export default function MeasurementsDetailsSection({
                                 {measurements[1].measuredAt.toLocaleDateString()}
                             </div>
                             <div className="border border-zinc-200 px-4 py-5 min-[400px]:p-6 xl:p-8 rounded-md shadow-sm lg:text-lg">
-                                <MeasurementsDetails measurement={measurements[1]} />
+                                <MeasurementsDetails
+                                    measurement={measurements[1]}
+                                    isLooseWeightGoal={null}
+                                    showDifference={false}
+                                />
                             </div>
                         </div>
                     )}
