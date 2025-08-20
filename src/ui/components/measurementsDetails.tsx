@@ -14,37 +14,59 @@ const measurementFields = [
 
 export default function MeasurementsDetails({
     measurement,
+    targetWeight,
     previousMeasurement,
 }: {
     measurement: Measurement;
+    targetWeight?: number;
     previousMeasurement?: Measurement;
 }) {
-    function toNumber(value: unknown): number | null {
-        if (typeof value === "number" && !isNaN(value)) return value;
-        if (typeof value === "string" && value.trim() !== "" && !isNaN(Number(value))) {
-            return Number(value);
-        }
-        return null;
+    console.log("mesure", measurement.weight);
+    console.log("cible", targetWeight);
+
+    let isLooseWeightGoal: boolean | null = null;
+    if (
+        targetWeight !== null &&
+        targetWeight !== undefined &&
+        measurement.weight !== null &&
+        measurement.weight !== undefined
+    ) {
+        console.log("condition OK");
+        isLooseWeightGoal = measurement.weight > targetWeight;
     }
 
     function formatMeasurementDifference(
         current: number,
         previous: number
-    ): { formatted: string; sign: string | null } {
+    ): { formatted: string; color: string | null } {
+        // console.log(isLooseWeightGoal);
+
         const difference = current - previous;
         if (difference === 0) {
             return {
                 formatted: "0",
-                sign: null,
+                color: null,
             };
         }
         let sign = "+";
+        let color = null;
         if (difference < 0) {
             sign = "-";
+            if (isLooseWeightGoal) {
+                color = "text-success";
+            } else if (isLooseWeightGoal === false) {
+                color = "text-destructive";
+            }
+        } else {
+            if (isLooseWeightGoal) {
+                color = "text-destructive";
+            } else if (isLooseWeightGoal === false) {
+                color = "text-success";
+            }
         }
         return {
             formatted: `${sign} ${Math.abs(difference).toFixed(1)}`,
-            sign,
+            color,
         };
     }
 
@@ -57,35 +79,26 @@ export default function MeasurementsDetails({
                 let displayValue = "-";
                 if (value instanceof Date) {
                     displayValue = value.toLocaleDateString();
-                } else {
-                    const numValue = toNumber(value);
-                    if (numValue !== null) {
-                        displayValue = `${numValue} ${item.unit}`;
-                    }
+                } else if (typeof value === "number" && value !== null) {
+                    displayValue = `${value} ${item.unit}`;
                 }
 
-                let difference: { formatted: string; sign: string | null } = { formatted: "", sign: null };
-                if (previousMeasurement) {
-                    const numValue = toNumber(value);
-                    const numPrevValue = toNumber(prevValue);
-                    if (numValue !== null && numPrevValue !== null) {
-                        difference = formatMeasurementDifference(numValue, numPrevValue);
-                    }
+                let difference: { formatted: string; color: string | null } = { formatted: "", color: null };
+                if (
+                    previousMeasurement &&
+                    typeof value === "number" &&
+                    value !== null &&
+                    typeof prevValue === "number" &&
+                    prevValue !== null
+                ) {
+                    difference = formatMeasurementDifference(value, prevValue);
                 }
                 return (
                     <li key={item.name} className="contents">
                         <h3>{item.label}</h3>
                         <span className="text-right">{displayValue}</span>
                         {previousMeasurement && (
-                            <span
-                                className={clsx(
-                                    "text-right",
-                                    difference.sign === "+"
-                                        ? "text-destructive"
-                                        : difference.sign === "-"
-                                        ? "text-success"
-                                        : "text-inherit"
-                                )}>
+                            <span className={clsx("text-right", difference.color ? difference.color : "text-inherit")}>
                                 {difference.formatted} {item.unit}
                             </span>
                         )}
