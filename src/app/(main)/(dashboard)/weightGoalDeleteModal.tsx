@@ -1,6 +1,6 @@
 "use client";
 
-import { archiveWeightGoal } from "@/app/actions/weightGoalActions";
+import { archiveWeightGoalAction } from "@/app/actions/weightGoalActions";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
 import { useActionState } from "react";
 
@@ -22,7 +22,7 @@ const initialState = {
 };
 
 export default function WeightGoalDeleteModal({ weightGoalId }: { weightGoalId: string }) {
-    const serverAction = archiveWeightGoal.bind(null, weightGoalId);
+    const serverAction = archiveWeightGoalAction.bind(null, weightGoalId);
     const [state, formAction, pending] = useActionState(serverAction, initialState);
 
     return (

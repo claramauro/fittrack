@@ -1,11 +1,11 @@
 "use server";
 
 import {
-    archiveGoal,
-    createGoal,
+    archiveWeightGoal,
+    createWeightGoal,
     getAllActiveGoalsByUser,
     getGoalById,
-    updateGoal,
+    updateWeightGoal,
 } from "@/libs/server/database/weight_goal";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
@@ -15,7 +15,7 @@ import { redirect } from "next/navigation";
 
 type ActionState = { status: string; message: string };
 
-export async function createWeightGoal(_initialState: ActionState, formData: FormData): Promise<ActionState> {
+export async function createWeightGoalAction(_initialState: ActionState, formData: FormData): Promise<ActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -30,9 +30,9 @@ export async function createWeightGoal(_initialState: ActionState, formData: For
 
         const activeGoals = await getAllActiveGoalsByUser(userId);
         if (activeGoals.length > 0) {
-            await Promise.all(activeGoals.map((goal) => archiveGoal(goal.id)));
+            await Promise.all(activeGoals.map((goal) => archiveWeightGoal(goal.id)));
         }
-        await createGoal(userId, targetWeight);
+        await createWeightGoal(userId, targetWeight);
         revalidatePath("/");
     } catch (error) {
         if (error instanceof Error) {
@@ -46,7 +46,7 @@ export async function createWeightGoal(_initialState: ActionState, formData: For
     redirect("/");
 }
 
-export async function updateWeightGoal(
+export async function updateWeightGoalAction(
     weightGoalId: string | undefined,
     _initialState: ActionState,
     formData: FormData
@@ -76,7 +76,7 @@ export async function updateWeightGoal(
             console.error("Unauthorized: The goal does not belong to this user");
             throw new Error("Unauthorized: The goal does not belong to this user");
         }
-        await updateGoal(weightGoalId, targetWeight);
+        await updateWeightGoal(weightGoalId, targetWeight);
         revalidatePath("/");
     } catch (error) {
         if (error instanceof Error) {
@@ -89,7 +89,7 @@ export async function updateWeightGoal(
     }
     redirect("/");
 }
-export async function archiveWeightGoal(
+export async function archiveWeightGoalAction(
     weightGoalId: string | undefined,
     _initialState: ActionState,
     _formData: FormData
@@ -111,7 +111,7 @@ export async function archiveWeightGoal(
             console.error("Unauthorized: The goal does not belong to this user");
             throw new Error("Unauthorized: The goal does not belong to this user");
         }
-        await archiveGoal(weightGoalId);
+        await archiveWeightGoal(weightGoalId);
         revalidatePath("/");
     } catch (error) {
         if (error instanceof Error) {

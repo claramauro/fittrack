@@ -1,24 +1,46 @@
 "use client";
 
-import { createMeasurements } from "@/app/actions/measurementsActions";
+import { createMeasurementsAction } from "@/app/actions/measurementsActions";
 import { Measurement } from "@/libs/types/measurement";
 import Button from "@/ui/components/button";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
-import { useActionState } from "react";
+import clsx from "clsx";
+import { Loader2Icon } from "lucide-react";
+import { useActionState, useEffect } from "react";
+import { toast } from "react-toastify";
 
-const initialState = {
-    status: "",
-    message: "",
-};
+export default function AddMeasuresForm({ latestMeasurement }: { latestMeasurement: Measurement }) {
+    const initialState = {
+        status: "",
+        message: "",
+        data: {
+            measuredAt: new Date().toISOString().slice(0, 10),
+            chest: latestMeasurement.chest?.toString() ?? "",
+            underbust: latestMeasurement.underbust?.toString() ?? "",
+            waist: latestMeasurement.waist?.toString() ?? "",
+            belly: latestMeasurement.belly?.toString() ?? "",
+            hips: latestMeasurement.hips?.toString() ?? "",
+            thigh: latestMeasurement.thigh?.toString() ?? "",
+            arm: latestMeasurement.arm?.toString() ?? "",
+            weight: latestMeasurement.weight?.toString() ?? "",
+        },
+        formErrors: null,
+    };
 
-export default function AddMeasuresForm({ latestMeasurement }: { latestMeasurement: Measurement | null }) {
-    const [state, formAction, pending] = useActionState(createMeasurements, initialState);
+    const [state, formAction, pending] = useActionState(createMeasurementsAction, initialState);
+
+    useEffect(() => {
+        if (state.status === "success") {
+            toast.success(state.message);
+        }
+    }, [state]);
 
     return (
         <div className="card p-6 max-w-[750px] mx-auto">
             <form action={formAction} className="flex flex-col gap-6">
-                <div className="w-min">
+                <h2 className="font-poppins text-lg font-bold">Ajouter de nouvelles mesures</h2>
+                <div className="">
                     <Label htmlFor="measuredAt" className="mb-2">
                         Date
                     </Label>
@@ -26,10 +48,15 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                         type="date"
                         id="measuredAt"
                         name="measuredAt"
+                        required
                         min={new Date("1900-01-01").toISOString().slice(0, 10)}
-                        defaultValue={new Date().toISOString().slice(0, 10)}
-                        className="input"
+                        max={new Date().toISOString().slice(0, 10)}
+                        defaultValue={state.data.measuredAt}
+                        className={clsx("input w-min", state?.formErrors?.measuredAt && "input-error")}
                     />
+                    <div className="error-message mt-1">
+                        {state?.formErrors?.measuredAt && state.formErrors.measuredAt}
+                    </div>
                 </div>
                 <div className="grid max-[320px]:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-4">
                     <div className="">
@@ -42,9 +69,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="chest"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.chest ?? ""}
+                            className={clsx("input", state?.formErrors?.chest && "input-error")}
+                            defaultValue={state.data.chest}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.chest && state.formErrors.chest}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="underbust" className="mb-2">
@@ -56,9 +84,12 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="underbust"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.underbust ?? ""}
+                            className={clsx("input", state?.formErrors?.underbust && "input-error")}
+                            defaultValue={state.data.underbust}
                         />
+                        <div className="error-message mt-1">
+                            {state?.formErrors?.underbust && state.formErrors.underbust}
+                        </div>
                     </div>
                     <div className="">
                         <Label htmlFor="waist" className="mb-2">
@@ -70,9 +101,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="waist"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.waist ?? ""}
+                            className={clsx("input", state?.formErrors?.waist && "input-error")}
+                            defaultValue={state.data.waist}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.waist && state.formErrors.waist}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="belly" className="mb-2">
@@ -84,9 +116,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="belly"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.belly ?? ""}
+                            className={clsx("input", state?.formErrors?.belly && "input-error")}
+                            defaultValue={state.data.belly}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.belly && state.formErrors.belly}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="hips" className="mb-2">
@@ -98,9 +131,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="hips"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.hips ?? ""}
+                            className={clsx("input", state?.formErrors?.hips && "input-error")}
+                            defaultValue={state.data.hips}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.hips && state.formErrors.hips}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="thigh" className="mb-2">
@@ -112,9 +146,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="thigh"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.thigh ?? ""}
+                            className={clsx("input", state?.formErrors?.thigh && "input-error")}
+                            defaultValue={state.data.thigh}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.thigh && state.formErrors.thigh}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="arm" className="mb-2">
@@ -126,9 +161,10 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="arm"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.arm ?? ""}
+                            className={clsx("input", state?.formErrors?.arm && "input-error")}
+                            defaultValue={state.data.arm}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.arm && state.formErrors.arm}</div>
                     </div>
                     <div className="">
                         <Label htmlFor="weight" className="mb-2">
@@ -140,13 +176,15 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             name="weight"
                             min={0}
                             step={0.1}
-                            className="input"
-                            defaultValue={latestMeasurement?.weight ?? ""}
+                            className={clsx("input", state?.formErrors?.weight && "input-error")}
+                            defaultValue={state.data.weight}
                         />
+                        <div className="error-message mt-1">{state?.formErrors?.weight && state.formErrors.weight}</div>
                     </div>
                 </div>
-                <Button type="submit" className="w-1/2 mx-auto">
-                    Ajouter
+                {state.status === "error" && <p className="error-message">{state.message}</p>}
+                <Button type="submit" className="w-1/2 mx-auto" disabled={pending}>
+                    {pending ? <Loader2Icon className="animate-spin" /> : "Ajouter"}
                 </Button>
             </form>
         </div>
