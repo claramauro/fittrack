@@ -16,14 +16,14 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
         message: "",
         data: {
             measuredAt: new Date().toISOString().slice(0, 10),
-            chest: latestMeasurement.chest?.toString() ?? "",
-            underbust: latestMeasurement.underbust?.toString() ?? "",
-            waist: latestMeasurement.waist?.toString() ?? "",
-            belly: latestMeasurement.belly?.toString() ?? "",
-            hips: latestMeasurement.hips?.toString() ?? "",
-            thigh: latestMeasurement.thigh?.toString() ?? "",
-            arm: latestMeasurement.arm?.toString() ?? "",
-            weight: latestMeasurement.weight?.toString() ?? "",
+            chest: latestMeasurement?.chest?.toString() ?? "",
+            underbust: latestMeasurement?.underbust?.toString() ?? "",
+            waist: latestMeasurement?.waist?.toString() ?? "",
+            belly: latestMeasurement?.belly?.toString() ?? "",
+            hips: latestMeasurement?.hips?.toString() ?? "",
+            thigh: latestMeasurement?.thigh?.toString() ?? "",
+            arm: latestMeasurement?.arm?.toString() ?? "",
+            weight: latestMeasurement?.weight?.toString() ?? "",
         },
         formErrors: null,
     };
@@ -33,6 +33,8 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
     useEffect(() => {
         if (state.status === "success") {
             toast.success(state.message);
+        } else if (state.status === "error") {
+            toast.error(state.message);
         }
     }, [state]);
 
@@ -182,7 +184,6 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                         <div className="error-message mt-1">{state?.formErrors?.weight && state.formErrors.weight}</div>
                     </div>
                 </div>
-                {state.status === "error" && <p className="error-message">{state.message}</p>}
                 <Button type="submit" className="w-1/2 mx-auto" disabled={pending}>
                     {pending ? <Loader2Icon className="animate-spin" /> : "Ajouter"}
                 </Button>
