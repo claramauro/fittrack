@@ -3,13 +3,15 @@
 import { Measurement } from "@/libs/types/measurement";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilIcon, Trash2Icon } from "lucide-react";
+import UpdateMeasurementModal from "../updateMeasurementModal";
+import { formatDateToShortFrString } from "@/libs/utils/dateUtils";
 
 export const columns: ColumnDef<Measurement>[] = [
     {
         accessorKey: "measuredAt",
         header: "Date",
         cell: ({ row }) => {
-            return new Date(row.getValue("measuredAt")).toLocaleDateString();
+            return formatDateToShortFrString(new Date(row.getValue("measuredAt")));
         },
     },
     {
@@ -78,22 +80,20 @@ export const columns: ColumnDef<Measurement>[] = [
     },
     {
         id: "actions",
-        cell: ({ row }) => (
-            <div className="flex justify-center items-center gap-1 min-w-[70px]">
-                <button
-                    type="button"
-                    title="Modifier ces données"
-                    aria-label="Modifier ces données"
-                    className="hover:cursor-pointer hover:scale-110">
-                    <PencilIcon className="size-4.5 text-gray-500" />
-                </button>
-                <button
-                    title="Supprimer ces données"
-                    aria-label="Supprimer ces données"
-                    className="hover:cursor-pointer hover:scale-110">
-                    <Trash2Icon className="size-4.5 text-rose-400" />
-                </button>
-            </div>
-        ),
+        cell: ({ row }) => {
+            const measurement = row.original;
+            if (!measurement) return null;
+            return (
+                <div className="flex justify-center items-center gap-1 min-w-[70px]">
+                    <UpdateMeasurementModal measurement={measurement} />
+                    <button
+                        title="Supprimer ces données"
+                        aria-label="Supprimer ces données"
+                        className="hover:cursor-pointer hover:scale-110">
+                        <Trash2Icon className="size-4.5 text-rose-400" />
+                    </button>
+                </div>
+            );
+        },
     },
 ];

@@ -1,0 +1,290 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/ui/shadcn/components/ui/dialog";
+import { Loader2Icon, PencilIcon } from "lucide-react";
+import { Measurement } from "@/libs/types/measurement";
+import { Label } from "@/ui/shadcn/components/ui/label";
+import { Input } from "@/ui/shadcn/components/ui/input";
+import clsx from "clsx";
+import Button from "@/ui/components/button";
+import { useActionState } from "react";
+import { updateMeasurementAction } from "@/app/actions/measurementActions";
+import { MeasurementActionState } from "@/libs/types/actionState";
+import { formatDateToShortFrString, formatDateToShortUsString } from "@/libs/utils/dateUtils";
+
+export default function UpdateMeasurementModal({ measurement }: { measurement: Measurement }) {
+    const initialState: MeasurementActionState = {
+        status: "",
+        message: "",
+        data: {
+            measuredAt: formatDateToShortUsString(measurement.measuredAt),
+            chest: measurement.chest?.toString() ?? "",
+            underbust: measurement.underbust?.toString() ?? "",
+            waist: measurement.waist?.toString() ?? "",
+            belly: measurement.belly?.toString() ?? "",
+            hips: measurement.hips?.toString() ?? "",
+            thigh: measurement.thigh?.toString() ?? "",
+            arm: measurement.arm?.toString() ?? "",
+            weight: measurement.weight?.toString() ?? "",
+        },
+        formErrors: null,
+    };
+
+    console.log(initialState.data.measuredAt);
+
+    const serverAction = updateMeasurementAction.bind(null, measurement.id);
+    const [state, formAction, pending] = useActionState(serverAction, initialState);
+
+    // useEffect(() => {
+    //     if (state.status === "success") {
+    //         toast.success(state.message);
+    //     } else if (state.status === "error") {
+    //         toast.error(state.message);
+    //     }
+    // }, [state]);
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <button
+                    type="button"
+                    title="Modifier ces données"
+                    aria-label="Modifier ces données"
+                    className="hover:cursor-pointer hover:scale-110">
+                    <PencilIcon className="size-4.5 text-gray-500" />
+                </button>
+            </DialogTrigger>
+            <DialogContent aria-describedby={undefined}>
+                <DialogHeader className="mb-4">
+                    <DialogTitle>
+                        Modifier les mesures du {formatDateToShortFrString(measurement.measuredAt)}
+                    </DialogTitle>
+                </DialogHeader>
+                <form action={formAction} className="flex flex-col gap-6">
+                    <div>
+                        <Label htmlFor="measuredAt" className="mb-2">
+                            Date
+                        </Label>
+                        <Input
+                            type="date"
+                            id="measuredAt"
+                            name="measuredAt"
+                            disabled
+                            //min={new Date("1900-01-01").toISOString().slice(0, 10)}
+                            //max={new Date().toISOString().slice(0, 10)}
+                            defaultValue={state.data.measuredAt}
+                            className="input w-min"
+                            //aria-describedby="measured-at-error"
+                        />
+                        {/* <div id="measured-at-error" className="error-message mt-1">
+                            {state?.formErrors?.measuredAt && state.formErrors.measuredAt}
+                        </div> */}
+                    </div>
+                    <div className="grid max-[320px]:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <Label htmlFor="chest" className="mb-2">
+                                Poitrine
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="chest"
+                                    name="chest"
+                                    //min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.chest && "input-error")}
+                                    defaultValue={state.data.chest}
+                                    aria-describedby="chest-unit chest-error"
+                                />
+                                <span
+                                    id="chest-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="chest-error" className="error-message mt-1">
+                                {state?.formErrors?.chest && state.formErrors.chest}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="underbust" className="mb-2">
+                                Sous poitrine
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="underbust"
+                                    name="underbust"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.underbust && "input-error")}
+                                    defaultValue={state.data.underbust}
+                                    aria-describedby="underbust-unit underbust-error"
+                                />
+                                <span
+                                    id="underbust-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="underbust-error" className="error-message mt-1">
+                                {state?.formErrors?.underbust && state.formErrors.underbust}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="waist" className="mb-2">
+                                Taille
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="waist"
+                                    name="waist"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.waist && "input-error")}
+                                    defaultValue={state.data.waist}
+                                    aria-describedby="waist-unit waist-error"
+                                />
+                                <span
+                                    id="waist-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="waist-error" className="error-message mt-1">
+                                {state?.formErrors?.waist && state.formErrors.waist}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="belly" className="mb-2">
+                                Ventre
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="belly"
+                                    name="belly"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.belly && "input-error")}
+                                    defaultValue={state.data.belly}
+                                    aria-describedby="belly-unit belly-error"
+                                />
+                                <span
+                                    id="belly-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="belly-error" className="error-message mt-1">
+                                {state?.formErrors?.belly && state.formErrors.belly}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="hips" className="mb-2">
+                                Hanches
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="hips"
+                                    name="hips"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.hips && "input-error")}
+                                    defaultValue={state.data.hips}
+                                    aria-describedby="hips-unit hips-error"
+                                />
+                                <span
+                                    id="hips-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="hips-error" className="error-message mt-1">
+                                {state?.formErrors?.hips && state.formErrors.hips}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="thigh" className="mb-2">
+                                Cuisse
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="thigh"
+                                    name="thigh"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.thigh && "input-error")}
+                                    defaultValue={state.data.thigh}
+                                    aria-describedby="thigh-unit thigh-error"
+                                />
+                                <span
+                                    id="thigh-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="thigh-error" className="error-message mt-1">
+                                {state?.formErrors?.thigh && state.formErrors.thigh}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="arm" className="mb-2">
+                                Bras
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="arm"
+                                    name="arm"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.arm && "input-error")}
+                                    defaultValue={state.data.arm}
+                                    aria-describedby="arm-unit arm-error"
+                                />
+                                <span
+                                    id="arm-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    cm
+                                </span>
+                            </div>
+                            <div id="arm-error" className="error-message mt-1">
+                                {state?.formErrors?.arm && state.formErrors.arm}
+                            </div>
+                        </div>
+                        <div>
+                            <Label htmlFor="weight" className="mb-2">
+                                Poids
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    type="number"
+                                    id="weight"
+                                    name="weight"
+                                    min={0}
+                                    step={0.1}
+                                    className={clsx("input", state?.formErrors?.weight && "input-error")}
+                                    defaultValue={state.data.weight}
+                                    aria-describedby="weight-unit weight-error"
+                                />
+                                <span
+                                    id="weight-unit"
+                                    className="absolute right-9 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none text-sm">
+                                    kg
+                                </span>
+                            </div>
+                            <div id="weight-error" className="error-message mt-1">
+                                {state?.formErrors?.weight && state.formErrors.weight}
+                            </div>
+                        </div>
+                    </div>
+                    <Button type="submit" className="w-1/2 mx-auto" disabled={pending}>
+                        {pending ? <Loader2Icon className="animate-spin" /> : "Modifier"}
+                    </Button>
+                </form>
+            </DialogContent>
+        </Dialog>
+    );
+}
