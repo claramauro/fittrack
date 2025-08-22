@@ -17,7 +17,20 @@ export async function getMeasurementsByUser(userId: string): Promise<Measurement
     return (rows as MeasurementDb[]).map(mapMeasurementDbToMeasurement);
 }
 
-export async function createMeasurements(
+export async function getUserMeasurementByDate(userId: string, date: Date): Promise<null | Measurement> {
+    const measuredAtString = date.toISOString().slice(0, 19).replace("T", " ");
+    const [rows] = await pool.query<RowDataPacket[]>(
+        "SELECT * FROM measurement WHERE user_id = ? AND measured_at = ?",
+        [userId, measuredAtString]
+    );
+    const measurement = rows[0] as MeasurementDb;
+    if (!measurement) {
+        return null;
+    }
+    return mapMeasurementDbToMeasurement(measurement);
+}
+
+export async function createMeasurement(
     userId: string,
     data: {
         measuredAt: Date;

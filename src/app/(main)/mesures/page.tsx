@@ -3,6 +3,7 @@ import AddMeasuresForm from "./addMeasuresForm";
 import { redirect } from "next/navigation";
 import { getMeasurementsByUser } from "@/libs/server/database/measurement";
 import { Measurement } from "@/libs/types/measurement";
+import MeasurementsHistory from "./measurementsHistory";
 
 export default async function MesuresPage() {
     const session = await getServerAuthSession();
@@ -22,6 +23,7 @@ export default async function MesuresPage() {
         <div className="pt-10">
             <h1 className="mb-10 text-4xl font-poppins font-medium">Mes mesures</h1>
             <AddMeasuresForm latestMeasurement={measurements[0]} />
+            <MeasurementsHistory measurements={measurements} />
         </div>
     );
 }

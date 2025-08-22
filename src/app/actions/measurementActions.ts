@@ -1,6 +1,6 @@
 "use server";
 
-import { createMeasurements } from "@/libs/server/database/measurement";
+import { createMeasurement, getUserMeasurementByDate } from "@/libs/server/database/measurement";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import { measurementsSchema } from "@/libs/validation/measurementsSchema";
@@ -34,7 +34,7 @@ type ActionState = {
     };
 };
 
-export async function createMeasurementsAction(initialState: ActionState, formData: FormData) {
+export async function createMeasurementAction(initialState: ActionState, formData: FormData) {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -75,7 +75,17 @@ export async function createMeasurementsAction(initialState: ActionState, formDa
                 formErrors: errors,
             };
         }
-        await createMeasurements(userId, measurementsSchemaValidation.data);
+        const existingMeasurements = await getUserMeasurementByDate(
+            userId,
+            measurementsSchemaValidation.data.measuredAt
+        );
+
+        if (existingMeasurements) {
+            throw new ValidationError(
+                "Ajout impossible :\n il existe déjà des mesures enregistrées pour cette date.\nVous devez les supprimer ou vous pouvez les modifier dans l’historique ci-dessous"
+            );
+        }
+        await createMeasurement(userId, measurementsSchemaValidation.data);
         revalidatePath("/mesures");
         return {
             status: "success",

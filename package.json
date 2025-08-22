@@ -15,6 +15,7 @@
         "@radix-ui/react-menubar": "^1.1.15",
         "@radix-ui/react-navigation-menu": "^1.2.13",
         "@radix-ui/react-slot": "^1.2.3",
+        "@tanstack/react-table": "^8.21.3",
         "@types/nodemailer": "^6.4.17",
         "bcrypt-ts": "^7.1.0",
         "class-variance-authority": "^0.7.1",

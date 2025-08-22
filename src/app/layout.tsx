@@ -11,7 +11,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={`min-h-screen flex flex-col ${raleway.variable} ${poppins.variable}`}>
                 {children}
-                <ToastContainer />
+                <ToastContainer className={"whitespace-pre-line"} />
             </body>
         </html>
     );

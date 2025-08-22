@@ -1,6 +1,6 @@
 "use client";
 
-import { createMeasurementsAction } from "@/app/actions/measurementsActions";
+import { createMeasurementAction } from "@/app/actions/measurementActions";
 import { Measurement } from "@/libs/types/measurement";
 import Button from "@/ui/components/button";
 import { Input } from "@/ui/shadcn/components/ui/input";
@@ -28,7 +28,7 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
         formErrors: null,
     };
 
-    const [state, formAction, pending] = useActionState(createMeasurementsAction, initialState);
+    const [state, formAction, pending] = useActionState(createMeasurementAction, initialState);
 
     useEffect(() => {
         if (state.status === "success") {
@@ -41,7 +41,7 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
     return (
         <div className="card p-6 max-w-[750px] mx-auto">
             <form action={formAction} className="flex flex-col gap-6">
-                <h2 className="font-poppins text-lg font-bold">Ajouter de nouvelles mesures</h2>
+                <h2 className="font-poppins text-lg font-bold">Ajouter une nouvelle mesure</h2>
                 <div className="">
                     <Label htmlFor="measuredAt" className="mb-2">
                         Date
@@ -55,13 +55,14 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                         max={new Date().toISOString().slice(0, 10)}
                         defaultValue={state.data.measuredAt}
                         className={clsx("input w-min", state?.formErrors?.measuredAt && "input-error")}
+                        aria-describedby="measured-at-error"
                     />
-                    <div className="error-message mt-1">
+                    <div id="measured-at-error" className="error-message mt-1">
                         {state?.formErrors?.measuredAt && state.formErrors.measuredAt}
                     </div>
                 </div>
                 <div className="grid max-[320px]:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="chest" className="mb-2">
                             Poitrine
                         </Label>
@@ -73,10 +74,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.chest && "input-error")}
                             defaultValue={state.data.chest}
+                            aria-describedby="chest-unit chest-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.chest && state.formErrors.chest}</div>
+                        <span
+                            id="chest-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="chest-error" className="error-message mt-1">
+                            {state?.formErrors?.chest && state.formErrors.chest}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="underbust" className="mb-2">
                             Sous poitrine
                         </Label>
@@ -88,12 +97,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.underbust && "input-error")}
                             defaultValue={state.data.underbust}
+                            aria-describedby="underbust-unit underbust-error"
                         />
-                        <div className="error-message mt-1">
+                        <span
+                            id="underbust-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="underbust-error" className="error-message mt-1">
                             {state?.formErrors?.underbust && state.formErrors.underbust}
                         </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="waist" className="mb-2">
                             Taille
                         </Label>
@@ -105,10 +120,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.waist && "input-error")}
                             defaultValue={state.data.waist}
+                            aria-describedby="waist-unit waist-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.waist && state.formErrors.waist}</div>
+                        <span
+                            id="waist-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="waist-error" className="error-message mt-1">
+                            {state?.formErrors?.waist && state.formErrors.waist}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="belly" className="mb-2">
                             Ventre
                         </Label>
@@ -120,10 +143,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.belly && "input-error")}
                             defaultValue={state.data.belly}
+                            aria-describedby="belly-unit belly-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.belly && state.formErrors.belly}</div>
+                        <span
+                            id="belly-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="belly-error" className="error-message mt-1">
+                            {state?.formErrors?.belly && state.formErrors.belly}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="hips" className="mb-2">
                             Hanches
                         </Label>
@@ -135,10 +166,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.hips && "input-error")}
                             defaultValue={state.data.hips}
+                            aria-describedby="hips-unit hips-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.hips && state.formErrors.hips}</div>
+                        <span
+                            id="hips-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="hips-error" className="error-message mt-1">
+                            {state?.formErrors?.hips && state.formErrors.hips}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="thigh" className="mb-2">
                             Cuisse
                         </Label>
@@ -150,10 +189,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.thigh && "input-error")}
                             defaultValue={state.data.thigh}
+                            aria-describedby="thigh-unit thigh-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.thigh && state.formErrors.thigh}</div>
+                        <span
+                            id="thigh-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="thigh-error" className="error-message mt-1">
+                            {state?.formErrors?.thigh && state.formErrors.thigh}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="arm" className="mb-2">
                             Bras
                         </Label>
@@ -165,10 +212,18 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.arm && "input-error")}
                             defaultValue={state.data.arm}
+                            aria-describedby="arm-unit arm-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.arm && state.formErrors.arm}</div>
+                        <span
+                            id="arm-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            cm
+                        </span>
+                        <div id="arm-error" className="error-message mt-1">
+                            {state?.formErrors?.arm && state.formErrors.arm}
+                        </div>
                     </div>
-                    <div className="">
+                    <div className="relative">
                         <Label htmlFor="weight" className="mb-2">
                             Poids
                         </Label>
@@ -180,8 +235,16 @@ export default function AddMeasuresForm({ latestMeasurement }: { latestMeasureme
                             step={0.1}
                             className={clsx("input", state?.formErrors?.weight && "input-error")}
                             defaultValue={state.data.weight}
+                            aria-describedby="weight-unit weight-error"
                         />
-                        <div className="error-message mt-1">{state?.formErrors?.weight && state.formErrors.weight}</div>
+                        <span
+                            id="weight-unit"
+                            className="absolute right-9 top-1/2 text-gray-500 pointer-events-none text-sm">
+                            kg
+                        </span>
+                        <div id="weight-error" className="error-message mt-1">
+                            {state?.formErrors?.weight && state.formErrors.weight}
+                        </div>
                     </div>
                 </div>
                 <Button type="submit" className="w-1/2 mx-auto" disabled={pending}>
