@@ -3,6 +3,7 @@ import { mapMeasurementDbToMeasurement } from "../mappers/measurementMapper";
 import { pool } from "./connection";
 import { MeasurementDb } from "@/libs/types/db/measurement";
 import { Measurement } from "@/libs/types/measurement";
+import moment from "moment";
 
 /**
  *
@@ -56,7 +57,9 @@ export async function createMeasurement(
         arm: number | null;
     }
 ) {
-    const measuredAtString = data.measuredAt.toISOString().slice(0, 10);
+    const measuredAtString = moment(data.measuredAt).format("YYYY-MM-DD");
+    console.log("bdd", measuredAtString);
+
     await pool.query<ResultSetHeader>(
         "INSERT INTO measurement (user_id, measured_at, weight, chest, underbust, waist, belly, hips, thigh, arm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
         [

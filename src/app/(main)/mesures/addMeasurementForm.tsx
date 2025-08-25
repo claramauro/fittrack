@@ -7,6 +7,8 @@ import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
 import clsx from "clsx";
 import { Loader2Icon } from "lucide-react";
+import moment from "moment";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { toast } from "react-toastify";
 
@@ -15,7 +17,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
         status: "",
         message: "",
         data: {
-            measuredAt: new Date().toISOString().slice(0, 10),
+            measuredAt: moment().format("YYYY-MM-DD"),
             chest: latestMeasurement?.chest?.toString() ?? "",
             underbust: latestMeasurement?.underbust?.toString() ?? "",
             waist: latestMeasurement?.waist?.toString() ?? "",
@@ -29,10 +31,12 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
     };
 
     const [state, formAction, pending] = useActionState(createMeasurementAction, initialState);
+    const router = useRouter();
 
     useEffect(() => {
         if (state.status === "success") {
             toast.success(state.message);
+            router.refresh();
         } else if (state.status === "error") {
             toast.error(state.message);
         }
@@ -51,8 +55,8 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         id="measuredAt"
                         name="measuredAt"
                         required
-                        min={new Date("1900-01-01").toISOString().slice(0, 10)}
-                        max={new Date().toISOString().slice(0, 10)}
+                        min={moment("1950-01-01").format("YYYY-MM-DD")}
+                        max={moment().format("YYYY-MM-DD")}
                         defaultValue={state.data.measuredAt}
                         className={clsx("input w-min", state?.formErrors?.measuredAt && "input-error")}
                         aria-describedby="measured-at-error"

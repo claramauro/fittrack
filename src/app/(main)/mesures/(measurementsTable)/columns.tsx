@@ -4,14 +4,14 @@ import { Measurement } from "@/libs/types/measurement";
 import { ColumnDef } from "@tanstack/react-table";
 import { PencilIcon, Trash2Icon } from "lucide-react";
 import UpdateMeasurementModal from "../updateMeasurementModal";
-import { formatDateToShortFrString } from "@/libs/utils/dateUtils";
+import moment from "moment";
 
 export const columns: ColumnDef<Measurement>[] = [
     {
         accessorKey: "measuredAt",
         header: "Date",
         cell: ({ row }) => {
-            return formatDateToShortFrString(new Date(row.getValue("measuredAt")));
+            return moment(row.getValue("measuredAt")).format("DD/MM/YYYY");
         },
     },
     {

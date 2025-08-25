@@ -5,17 +5,18 @@ import { Label } from "@/ui/shadcn/components/ui/label";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import clsx from "clsx";
 import Button from "@/ui/components/button";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { updateMeasurementAction } from "@/app/actions/measurementActions";
-import { MeasurementActionState } from "@/libs/types/actionState";
-import { formatDateToShortFrString, formatDateToShortUsString } from "@/libs/utils/dateUtils";
+import { UpdateMeasurementActionState } from "@/libs/types/actionState";
+import moment from "moment";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 export default function UpdateMeasurementModal({ measurement }: { measurement: Measurement }) {
-    const initialState: MeasurementActionState = {
+    const initialState: UpdateMeasurementActionState = {
         status: "",
         message: "",
         data: {
-            measuredAt: formatDateToShortUsString(measurement.measuredAt),
             chest: measurement.chest?.toString() ?? "",
             underbust: measurement.underbust?.toString() ?? "",
             waist: measurement.waist?.toString() ?? "",
@@ -28,21 +29,23 @@ export default function UpdateMeasurementModal({ measurement }: { measurement: M
         formErrors: null,
     };
 
-    console.log(initialState.data.measuredAt);
-
     const serverAction = updateMeasurementAction.bind(null, measurement.id);
     const [state, formAction, pending] = useActionState(serverAction, initialState);
+    const [open, setOpen] = useState(false);
+    const router = useRouter();
 
-    // useEffect(() => {
-    //     if (state.status === "success") {
-    //         toast.success(state.message);
-    //     } else if (state.status === "error") {
-    //         toast.error(state.message);
-    //     }
-    // }, [state]);
+    useEffect(() => {
+        if (state.status === "success") {
+            toast.success(state.message);
+            setOpen(false);
+            router.refresh();
+        } else if (state.status === "error") {
+            toast.error(state.message);
+        }
+    }, [state]);
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <button
                     type="button"
@@ -55,7 +58,7 @@ export default function UpdateMeasurementModal({ measurement }: { measurement: M
             <DialogContent aria-describedby={undefined}>
                 <DialogHeader className="mb-4">
                     <DialogTitle>
-                        Modifier les mesures du {formatDateToShortFrString(measurement.measuredAt)}
+                        Modifier les mesures du {moment(measurement.measuredAt).format("DD/MM/YYYY")}
                     </DialogTitle>
                 </DialogHeader>
                 <form action={formAction} className="flex flex-col gap-6">
@@ -68,15 +71,9 @@ export default function UpdateMeasurementModal({ measurement }: { measurement: M
                             id="measuredAt"
                             name="measuredAt"
                             disabled
-                            //min={new Date("1900-01-01").toISOString().slice(0, 10)}
-                            //max={new Date().toISOString().slice(0, 10)}
-                            defaultValue={state.data.measuredAt}
+                            defaultValue={moment(measurement.measuredAt).format("YYYY-MM-DD")}
                             className="input w-min"
-                            //aria-describedby="measured-at-error"
                         />
-                        {/* <div id="measured-at-error" className="error-message mt-1">
-                            {state?.formErrors?.measuredAt && state.formErrors.measuredAt}
-                        </div> */}
                     </div>
                     <div className="grid max-[320px]:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-4">
                         <div>
@@ -88,7 +85,7 @@ export default function UpdateMeasurementModal({ measurement }: { measurement: M
                                     type="number"
                                     id="chest"
                                     name="chest"
-                                    //min={0}
+                                    min={0}
                                     step={0.1}
                                     className={clsx("input", state?.formErrors?.chest && "input-error")}
                                     defaultValue={state.data.chest}

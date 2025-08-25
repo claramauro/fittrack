@@ -8,33 +8,33 @@ import {
 } from "@/libs/server/database/measurement";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
-import { MeasurementActionState } from "@/libs/types/actionState";
+import { AddMeasurementActionState, UpdateMeasurementActionState } from "@/libs/types/actionState";
 import { measurementsSchema } from "@/libs/validation/measurementsSchema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createMeasurementAction(initialState: MeasurementActionState, formData: FormData) {
+export async function createMeasurementAction(initialState: AddMeasurementActionState, formData: FormData) {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
     }
     const userId = session.user.id;
-    try {
-        const allowedKeys = ["measuredAt", "chest", "underbust", "waist", "belly", "hips", "thigh", "arm", "weight"];
-        const measurementsData: Record<string, string | null> = {};
-        for (let [key, value] of formData.entries()) {
-            if (!allowedKeys.includes(key)) continue;
-            if (key === "measuredAt") {
-                measurementsData[key] = String(value);
-            } else {
-                measurementsData[key] = value === "" ? null : String(value);
-            }
+    const allowedKeys = ["measuredAt", "chest", "underbust", "waist", "belly", "hips", "thigh", "arm", "weight"];
+    const measurementsData: Record<string, string | null> = {};
+    for (let [key, value] of formData.entries()) {
+        if (!allowedKeys.includes(key)) continue;
+        if (key === "measuredAt") {
+            measurementsData[key] = String(value);
+        } else {
+            measurementsData[key] = value === "" ? null : String(value);
         }
+    }
+    try {
         const measurementsSchemaValidation = measurementsSchema.safeParse(measurementsData);
         if (measurementsSchemaValidation.error) {
             const errors: Record<string, string> = {};
             measurementsSchemaValidation.error.issues.forEach((issue) => {
-                const key = issue.path[0] as keyof MeasurementActionState["formErrors"];
+                const key = issue.path[0] as keyof AddMeasurementActionState["formErrors"];
                 errors[key] = issue.message;
             });
             return {
@@ -84,7 +84,17 @@ export async function createMeasurementAction(initialState: MeasurementActionSta
         return {
             status: "error",
             message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
-            data: initialState.data,
+            data: {
+                measuredAt: measurementsData.measuredAt ?? "",
+                chest: measurementsData.chest ?? "",
+                underbust: measurementsData.underbust ?? "",
+                waist: measurementsData.waist ?? "",
+                belly: measurementsData.belly ?? "",
+                hips: measurementsData.hips ?? "",
+                thigh: measurementsData.thigh ?? "",
+                arm: measurementsData.arm ?? "",
+                weight: measurementsData.weight ?? "",
+            },
             formErrors: null,
         };
     }
@@ -92,7 +102,7 @@ export async function createMeasurementAction(initialState: MeasurementActionSta
 
 export async function updateMeasurementAction(
     measurementId: string,
-    initialState: MeasurementActionState,
+    initialState: UpdateMeasurementActionState,
     formData: FormData
 ) {
     const session = await getServerAuthSession();
@@ -100,24 +110,23 @@ export async function updateMeasurementAction(
         redirect("/connexion");
     }
     const userId = session.user.id;
+    const measurementsData: Record<string, string | null> = {};
+    for (let [key, value] of formData.entries()) {
+        measurementsData[key] = value === "" ? null : String(value);
+    }
     try {
-        const measurementsData: Record<string, string | null> = {};
-        for (let [key, value] of formData.entries()) {
-            measurementsData[key] = value === "" ? null : String(value);
-        }
         const measurementsSchemaValidation = measurementsSchema.omit({ measuredAt: true }).safeParse(measurementsData);
 
         if (measurementsSchemaValidation.error) {
             const errors: Record<string, string> = {};
             measurementsSchemaValidation.error.issues.forEach((issue) => {
-                const key = issue.path[0] as keyof MeasurementActionState["formErrors"];
+                const key = issue.path[0] as keyof UpdateMeasurementActionState["formErrors"];
                 errors[key] = issue.message;
             });
             return {
                 status: "error",
                 message: "Donnée(s) non valide(s), veuillez corriger et valider à nouveau",
                 data: {
-                    measuredAt: initialState.data.measuredAt,
                     chest: measurementsData.chest ?? "",
                     underbust: measurementsData.underbust ?? "",
                     waist: measurementsData.waist ?? "",
@@ -135,24 +144,38 @@ export async function updateMeasurementAction(
             throw new Error("No measurement with this ID");
         }
         await updateMeasurement(measurementId, measurementsSchemaValidation.data);
+        revalidatePath("/mesures");
+        return {
+            status: "success",
+            message: "Mesures modifiées",
+            data: {
+                chest: measurementsData.chest ?? "",
+                underbust: measurementsData.underbust ?? "",
+                waist: measurementsData.waist ?? "",
+                belly: measurementsData.belly ?? "",
+                hips: measurementsData.hips ?? "",
+                thigh: measurementsData.thigh ?? "",
+                arm: measurementsData.arm ?? "",
+                weight: measurementsData.weight ?? "",
+            },
+            formErrors: null,
+        };
     } catch (error) {
-        console.log(error);
+        console.error(error);
+        return {
+            status: "error",
+            message: "Une erreur est survenue, veuillez réessayer.",
+            data: {
+                chest: measurementsData.chest ?? "",
+                underbust: measurementsData.underbust ?? "",
+                waist: measurementsData.waist ?? "",
+                belly: measurementsData.belly ?? "",
+                hips: measurementsData.hips ?? "",
+                thigh: measurementsData.thigh ?? "",
+                arm: measurementsData.arm ?? "",
+                weight: measurementsData.weight ?? "",
+            },
+            formErrors: null,
+        };
     }
-
-    return {
-        status: "",
-        message: "",
-        data: {
-            measuredAt: initialState.data.measuredAt ?? "",
-            chest: initialState.data.chest ?? "",
-            underbust: initialState.data.underbust ?? "",
-            waist: initialState.data.waist ?? "",
-            belly: initialState.data.belly ?? "",
-            hips: initialState.data.hips ?? "",
-            thigh: initialState.data.thigh ?? "",
-            arm: initialState.data.arm ?? "",
-            weight: initialState.data.weight ?? "",
-        },
-        formErrors: null,
-    };
 }

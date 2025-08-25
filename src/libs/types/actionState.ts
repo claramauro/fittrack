@@ -1,4 +1,4 @@
-export type MeasurementActionState = {
+export type AddMeasurementActionState = {
     status: string;
     message: string;
     data: {
@@ -23,6 +23,10 @@ export type MeasurementActionState = {
         thigh?: string;
         arm?: string;
     };
+};
+
+export type UpdateMeasurementActionState = Omit<AddMeasurementActionState, "data"> & {
+    data: Omit<AddMeasurementActionState["data"], "measuredAt">;
 };
 
 export type WeightGoalActionState = { status: string; message: string };
