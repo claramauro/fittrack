@@ -105,3 +105,7 @@ export async function updateMeasurement(
         ]
     );
 }
+
+export async function deleteMeasurement(measurementId: string) {
+    await pool.query<ResultSetHeader>("DELETE FROM measurement WHERE id = ?", [measurementId]);
+}

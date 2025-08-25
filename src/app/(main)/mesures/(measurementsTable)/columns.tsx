@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PencilIcon, Trash2Icon } from "lucide-react";
 import UpdateMeasurementModal from "../updateMeasurementModal";
 import moment from "moment";
+import DeleteMeasurementModal from "../deleteMeasurementModal";
 
 export const columns: ColumnDef<Measurement>[] = [
     {
@@ -86,12 +87,7 @@ export const columns: ColumnDef<Measurement>[] = [
             return (
                 <div className="flex justify-center items-center gap-1 min-w-[70px]">
                     <UpdateMeasurementModal measurement={measurement} />
-                    <button
-                        title="Supprimer ces données"
-                        aria-label="Supprimer ces données"
-                        className="hover:cursor-pointer hover:scale-110">
-                        <Trash2Icon className="size-4.5 text-rose-400" />
-                    </button>
+                    <DeleteMeasurementModal measurement={measurement} />
                 </div>
             );
         },

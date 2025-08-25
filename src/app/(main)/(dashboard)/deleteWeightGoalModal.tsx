@@ -15,13 +15,14 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/ui/shadcn/components/ui/alert-dialog";
+import { ActionState } from "@/libs/types/actionState";
 
-const initialState = {
+const initialState: ActionState = {
     status: "",
     message: "",
 };
 
-export default function WeightGoalDeleteModal({ weightGoalId }: { weightGoalId: string }) {
+export default function DeleteWeightGoalModal({ weightGoalId }: { weightGoalId: string }) {
     const serverAction = archiveWeightGoalAction.bind(null, weightGoalId);
     const [state, formAction, pending] = useActionState(serverAction, initialState);
 

@@ -1,6 +1,6 @@
-export type AddMeasurementActionState = {
-    status: string;
-    message: string;
+export type ActionState = { status: string; message: string };
+
+export interface AddMeasurementActionState extends ActionState {
     data: {
         measuredAt: string;
         weight: string;
@@ -23,10 +23,8 @@ export type AddMeasurementActionState = {
         thigh?: string;
         arm?: string;
     };
-};
+}
 
 export type UpdateMeasurementActionState = Omit<AddMeasurementActionState, "data"> & {
     data: Omit<AddMeasurementActionState["data"], "measuredAt">;
 };
-
-export type WeightGoalActionState = { status: string; message: string };

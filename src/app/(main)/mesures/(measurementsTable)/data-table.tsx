@@ -30,7 +30,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                     <TableHead
                                         key={header.id}
                                         className={clsx(
-                                            "border border-zinc-200 text-center font-bold p-4 bg-gray-100",
+                                            "border border-zinc-200 text-center text-base font-bold p-4 bg-gray-100",
                                             isFirst && "sticky left-0 z-10 shadow-sm",
                                             isLast && "sticky right-0 z-10 shadow-sm"
                                         )}>
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
                                         <TableCell
                                             key={cell.id}
                                             className={clsx(
-                                                "border border-zinc-200 text-center px-3 py-4 bg-inherit",
+                                                "border border-zinc-200 text-center text-base px-3 py-4 bg-inherit",
                                                 isFirst && "sticky left-0 z-10 shadow-sm",
                                                 isLast && "sticky right-0 z-10 shadow-sm"
                                             )}>

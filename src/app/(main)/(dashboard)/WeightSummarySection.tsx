@@ -1,6 +1,6 @@
 import React from "react";
 import WeightGoalModal from "./weightGoalModal";
-import WeightGoalDeleteModal from "./weightGoalDeleteModal";
+import DeleteWeightGoalModal from "./deleteWeightGoalModal";
 import clsx from "clsx";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 
@@ -34,7 +34,7 @@ export default function WeightSummarySection({
                                     initialValue={weightGoal.targetWeight.toString()}
                                     weightGoalId={weightGoal.id}
                                 />
-                                <WeightGoalDeleteModal weightGoalId={weightGoal.id} />
+                                <DeleteWeightGoalModal weightGoalId={weightGoal.id} />
                             </div>
                         </div>
                     ) : (

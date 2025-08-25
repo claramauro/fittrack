@@ -5,15 +5,19 @@ import {
     getMeasurementById,
     getMeasurementByDate,
     updateMeasurement,
+    deleteMeasurement,
 } from "@/libs/server/database/measurement";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
-import { AddMeasurementActionState, UpdateMeasurementActionState } from "@/libs/types/actionState";
+import { ActionState, AddMeasurementActionState, UpdateMeasurementActionState } from "@/libs/types/actionState";
 import { measurementsSchema } from "@/libs/validation/measurementsSchema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function createMeasurementAction(initialState: AddMeasurementActionState, formData: FormData) {
+export async function createMeasurementAction(
+    initialState: AddMeasurementActionState,
+    formData: FormData
+): Promise<AddMeasurementActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -104,7 +108,7 @@ export async function updateMeasurementAction(
     measurementId: string,
     initialState: UpdateMeasurementActionState,
     formData: FormData
-) {
+): Promise<UpdateMeasurementActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -176,6 +180,35 @@ export async function updateMeasurementAction(
                 weight: measurementsData.weight ?? "",
             },
             formErrors: null,
+        };
+    }
+}
+
+export async function deleteMeasurementAction(
+    measurementId: string,
+    _initialState: ActionState,
+    _formData: FormData
+): Promise<ActionState> {
+    const session = await getServerAuthSession();
+    if (!session || !session.user) {
+        redirect("/connexion");
+    }
+    const userId = session.user.id;
+    try {
+        const measurementToDelete = await getMeasurementById(userId, measurementId);
+        if (!measurementToDelete) {
+            throw Error("No measurement with this ID");
+        }
+        await deleteMeasurement(measurementId);
+        return {
+            status: "success",
+            message: "Mesures supprimées",
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            status: "error",
+            message: "Une erreur est survenue, veuillez réessayer.",
         };
     }
 }

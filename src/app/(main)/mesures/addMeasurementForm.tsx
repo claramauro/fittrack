@@ -47,7 +47,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
             <form action={formAction} className="flex flex-col gap-6">
                 <h2 className="font-poppins text-lg font-bold">Ajouter une nouvelle mesure</h2>
                 <div className="">
-                    <Label htmlFor="measuredAt" className="mb-2">
+                    <Label htmlFor="measuredAt" className="mb-2 text-base">
                         Date
                     </Label>
                     <Input
@@ -58,7 +58,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         min={moment("1950-01-01").format("YYYY-MM-DD")}
                         max={moment().format("YYYY-MM-DD")}
                         defaultValue={state.data.measuredAt}
-                        className={clsx("input w-min", state?.formErrors?.measuredAt && "input-error")}
+                        className={clsx("input w-min text-base!", state?.formErrors?.measuredAt && "input-error")}
                         aria-describedby="measured-at-error"
                     />
                     <div id="measured-at-error" className="error-message mt-1">
@@ -67,7 +67,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                 </div>
                 <div className="grid max-[320px]:grid-cols-1 grid-cols-2 md:grid-cols-3 gap-4">
                     <div>
-                        <Label htmlFor="chest" className="mb-2">
+                        <Label htmlFor="chest" className="mb-2 text-base">
                             Poitrine
                         </Label>
                         <div className="relative">
@@ -77,7 +77,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="chest"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.chest && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.chest && "input-error")}
                                 defaultValue={state.data.chest}
                                 aria-describedby="chest-unit chest-error"
                             />
@@ -92,7 +92,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="underbust" className="mb-2">
+                        <Label htmlFor="underbust" className="mb-2 text-base">
                             Sous poitrine
                         </Label>
                         <div className="relative">
@@ -102,7 +102,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="underbust"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.underbust && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.underbust && "input-error")}
                                 defaultValue={state.data.underbust}
                                 aria-describedby="underbust-unit underbust-error"
                             />
@@ -117,7 +117,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="waist" className="mb-2">
+                        <Label htmlFor="waist" className="mb-2 text-base">
                             Taille
                         </Label>
                         <div className="relative">
@@ -127,7 +127,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="waist"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.waist && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.waist && "input-error")}
                                 defaultValue={state.data.waist}
                                 aria-describedby="waist-unit waist-error"
                             />
@@ -142,7 +142,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="belly" className="mb-2">
+                        <Label htmlFor="belly" className="mb-2 text-base">
                             Ventre
                         </Label>
                         <div className="relative">
@@ -152,7 +152,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="belly"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.belly && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.belly && "input-error")}
                                 defaultValue={state.data.belly}
                                 aria-describedby="belly-unit belly-error"
                             />
@@ -167,7 +167,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="hips" className="mb-2">
+                        <Label htmlFor="hips" className="mb-2 text-base">
                             Hanches
                         </Label>
                         <div className="relative">
@@ -177,7 +177,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="hips"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.hips && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.hips && "input-error")}
                                 defaultValue={state.data.hips}
                                 aria-describedby="hips-unit hips-error"
                             />
@@ -192,7 +192,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="thigh" className="mb-2">
+                        <Label htmlFor="thigh" className="mb-2 text-base">
                             Cuisse
                         </Label>
                         <div className="relative">
@@ -202,7 +202,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="thigh"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.thigh && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.thigh && "input-error")}
                                 defaultValue={state.data.thigh}
                                 aria-describedby="thigh-unit thigh-error"
                             />
@@ -217,7 +217,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="arm" className="mb-2">
+                        <Label htmlFor="arm" className="mb-2 text-base">
                             Bras
                         </Label>
                         <div className="relative">
@@ -227,7 +227,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="arm"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.arm && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.arm && "input-error")}
                                 defaultValue={state.data.arm}
                                 aria-describedby="arm-unit arm-error"
                             />
@@ -242,7 +242,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         </div>
                     </div>
                     <div>
-                        <Label htmlFor="weight" className="mb-2">
+                        <Label htmlFor="weight" className="mb-2 text-base">
                             Poids
                         </Label>
                         <div className="relative">
@@ -252,7 +252,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                                 name="weight"
                                 min={0}
                                 step={0.1}
-                                className={clsx("input", state?.formErrors?.weight && "input-error")}
+                                className={clsx("input text-base!", state?.formErrors?.weight && "input-error")}
                                 defaultValue={state.data.weight}
                                 aria-describedby="weight-unit weight-error"
                             />

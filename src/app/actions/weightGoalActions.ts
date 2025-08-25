@@ -9,15 +9,15 @@ import {
 } from "@/libs/server/database/weight_goal";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
-import { WeightGoalActionState } from "@/libs/types/actionState";
+import { ActionState } from "@/libs/types/actionState";
 import { targetWeightSchema } from "@/libs/validation/weightGoalSchema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createWeightGoalAction(
-    _initialState: WeightGoalActionState,
+    _initialState: ActionState,
     formData: FormData
-): Promise<WeightGoalActionState> {
+): Promise<ActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -50,9 +50,9 @@ export async function createWeightGoalAction(
 
 export async function updateWeightGoalAction(
     weightGoalId: string | undefined,
-    _initialState: WeightGoalActionState,
+    _initialState: ActionState,
     formData: FormData
-): Promise<WeightGoalActionState> {
+): Promise<ActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -93,9 +93,9 @@ export async function updateWeightGoalAction(
 }
 export async function archiveWeightGoalAction(
     weightGoalId: string | undefined,
-    _initialState: WeightGoalActionState,
+    _initialState: ActionState,
     _formData: FormData
-): Promise<WeightGoalActionState> {
+): Promise<ActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
