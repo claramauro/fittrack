@@ -28,3 +28,7 @@ export interface AddMeasurementActionState extends ActionState {
 export type UpdateMeasurementActionState = Omit<AddMeasurementActionState, "data"> & {
     data: Omit<AddMeasurementActionState["data"], "measuredAt">;
 };
+
+export interface WeightGoalActionState extends ActionState {
+    formError: null | string;
+}

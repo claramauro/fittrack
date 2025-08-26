@@ -2,7 +2,7 @@
 
 import { archiveWeightGoalAction } from "@/app/actions/weightGoalActions";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 import Button from "@/ui/components/button";
 import {
@@ -16,6 +16,8 @@ import {
     AlertDialogTrigger,
 } from "@/ui/shadcn/components/ui/alert-dialog";
 import { ActionState } from "@/libs/types/actionState";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const initialState: ActionState = {
     status: "",
@@ -25,6 +27,16 @@ const initialState: ActionState = {
 export default function DeleteWeightGoalModal({ weightGoalId }: { weightGoalId: string }) {
     const serverAction = archiveWeightGoalAction.bind(null, weightGoalId);
     const [state, formAction, pending] = useActionState(serverAction, initialState);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (state.status === "success") {
+            toast.success(state.message);
+            router.refresh();
+        } else if (state.status === "error") {
+            toast.error(state.message);
+        }
+    }, [state]);
 
     return (
         <AlertDialog>
@@ -54,7 +66,6 @@ export default function DeleteWeightGoalModal({ weightGoalId }: { weightGoalId: 
                         </Button>
                     </form>
                 </AlertDialogFooter>
-                {state && state.status === "error" && <p className="error-message">{state.message}</p>}
             </AlertDialogContent>
         </AlertDialog>
     );

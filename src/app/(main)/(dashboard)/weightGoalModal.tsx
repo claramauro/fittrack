@@ -11,7 +11,20 @@ import {
     DialogTrigger,
 } from "@/ui/shadcn/components/ui/dialog";
 import { Loader2Icon, PencilIcon, PlusIcon } from "lucide-react";
-import WeightGoalForm from "./weightGoalForm";
+import { useActionState, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { WeightGoalActionState } from "@/libs/types/actionState";
+import { createWeightGoalAction, updateWeightGoalAction } from "@/app/actions/weightGoalActions";
+import { Label } from "@/ui/shadcn/components/ui/label";
+import { Input } from "@/ui/shadcn/components/ui/input";
+import clsx from "clsx";
+
+const initialState: WeightGoalActionState = {
+    status: "",
+    message: "",
+    formError: null,
+};
 
 export default function WeightGoalModal({
     mode,
@@ -23,8 +36,23 @@ export default function WeightGoalModal({
     weightGoalId?: string;
 }) {
     const isEdit = mode === "edit";
+    const serverAction = isEdit ? updateWeightGoalAction.bind(null, weightGoalId) : createWeightGoalAction;
+    const [state, formAction, pending] = useActionState(serverAction, initialState);
+    const [open, setOpen] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (state.status === "success") {
+            toast.success(state.message);
+            router.refresh();
+            setOpen(false);
+        } else if (state.status === "error") {
+            toast.error(state.message);
+        }
+    }, [state]);
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 {isEdit ? (
                     <button
@@ -48,20 +76,32 @@ export default function WeightGoalModal({
                 <DialogHeader className="mb-4">
                     <DialogTitle>{isEdit ? "Modifier l'objectif" : "Définir un nouvel objectif"}</DialogTitle>
                 </DialogHeader>
-                <WeightGoalForm isEdit={isEdit} initialValue={initialValue} weightGoalId={weightGoalId}>
-                    {(pending) => (
-                        <DialogFooter className="mt-6">
-                            <DialogClose asChild>
-                                <Button type="button" variant="outline">
-                                    Annuler
-                                </Button>
-                            </DialogClose>
-                            <Button type="submit" disabled={pending}>
-                                {!pending ? isEdit ? "Modifier" : "Créer" : <Loader2Icon className="animate-spin" />}
+                <form action={formAction}>
+                    <Label className="mb-4" htmlFor="targetWeight">
+                        Poids cible
+                    </Label>
+                    <Input
+                        type="number"
+                        name="targetWeight"
+                        id="targetWeight"
+                        defaultValue={initialValue ?? ""}
+                        required
+                        min={0}
+                        step={0.1}
+                        className={clsx("input", state.formError && "input-error")}
+                    />
+                    {state.formError && <p className="error-message mt-4">{state.formError}</p>}
+                    <DialogFooter className="mt-6">
+                        <DialogClose asChild>
+                            <Button type="button" variant="outline">
+                                Annuler
                             </Button>
-                        </DialogFooter>
-                    )}
-                </WeightGoalForm>
+                        </DialogClose>
+                        <Button type="submit" disabled={pending}>
+                            {!pending ? isEdit ? "Modifier" : "Créer" : <Loader2Icon className="animate-spin" />}
+                        </Button>
+                    </DialogFooter>
+                </form>
             </DialogContent>
         </Dialog>
     );
