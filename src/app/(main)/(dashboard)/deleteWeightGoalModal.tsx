@@ -1,6 +1,6 @@
 "use client";
 
-import { archiveWeightGoal } from "@/app/actions/weightGoalActions";
+import { archiveWeightGoalAction } from "@/app/actions/weightGoalActions";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
 import { useActionState } from "react";
 
@@ -15,14 +15,15 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/ui/shadcn/components/ui/alert-dialog";
+import { ActionState } from "@/libs/types/actionState";
 
-const initialState = {
+const initialState: ActionState = {
     status: "",
     message: "",
 };
 
-export default function WeightGoalDeleteModal({ weightGoalId }: { weightGoalId: string }) {
-    const serverAction = archiveWeightGoal.bind(null, weightGoalId);
+export default function DeleteWeightGoalModal({ weightGoalId }: { weightGoalId: string }) {
+    const serverAction = archiveWeightGoalAction.bind(null, weightGoalId);
     const [state, formAction, pending] = useActionState(serverAction, initialState);
 
     return (

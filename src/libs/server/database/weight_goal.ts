@@ -37,17 +37,17 @@ export async function getAllActiveGoalsByUser(userId: string): Promise<WeightGoa
     return (rows as WeightGoalDb[]).map(mapWeightGoalDbToWeightGoal);
 }
 
-export async function archiveGoal(id: string) {
+export async function archiveWeightGoal(id: string) {
     await pool.query<ResultSetHeader>("UPDATE weight_goal SET status = 'archived' WHERE id = ?", [id]);
 }
 
-export async function createGoal(userId: string, targetWeight: number) {
+export async function createWeightGoal(userId: string, targetWeight: number) {
     await pool.query<ResultSetHeader>("INSERT INTO weight_goal (user_id, target_weight) VALUES (?, ?);", [
         userId,
         targetWeight,
     ]);
 }
 
-export async function updateGoal(id: string, targetWeight: number) {
+export async function updateWeightGoal(id: string, targetWeight: number) {
     await pool.query<ResultSetHeader>("UPDATE weight_goal SET target_weight = ? WHERE id = ?", [targetWeight, id]);
 }

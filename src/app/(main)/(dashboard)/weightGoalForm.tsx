@@ -1,10 +1,11 @@
-import { createWeightGoal, updateWeightGoal } from "@/app/actions/weightGoalActions";
+import { createWeightGoalAction, updateWeightGoalAction } from "@/app/actions/weightGoalActions";
+import { WeightGoalActionState } from "@/libs/types/actionState";
 import { Input } from "@/ui/shadcn/components/ui/input";
 import { Label } from "@/ui/shadcn/components/ui/label";
 import clsx from "clsx";
 import { useActionState } from "react";
 
-const initialState = {
+const initialState: WeightGoalActionState = {
     status: "",
     message: "",
 };
@@ -20,7 +21,7 @@ export default function WeightGoalForm({
     initialValue?: string;
     weightGoalId?: string;
 }) {
-    const serverAction = isEdit ? updateWeightGoal.bind(null, weightGoalId) : createWeightGoal;
+    const serverAction = isEdit ? updateWeightGoalAction.bind(null, weightGoalId) : createWeightGoalAction;
 
     const [state, formAction, pending] = useActionState(serverAction, initialState);
 

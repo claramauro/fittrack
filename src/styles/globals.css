@@ -193,6 +193,10 @@
     }
 
     .input-error {
-        @apply ring-2 ring-destructive focus-visible:ring-destructive
+        @apply ring-2 ring-destructive focus-visible:ring-destructive;
+    }
+
+    .card {
+        @apply border border-zinc-200 rounded-md shadow-sm;
     }
 }

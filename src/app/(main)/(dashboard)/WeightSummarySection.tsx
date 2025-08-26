@@ -1,6 +1,6 @@
 import React from "react";
 import WeightGoalModal from "./weightGoalModal";
-import WeightGoalDeleteModal from "./weightGoalDeleteModal";
+import DeleteWeightGoalModal from "./deleteWeightGoalModal";
 import clsx from "clsx";
 import { WeightGoal } from "@/libs/types/weigthGoal";
 
@@ -15,7 +15,7 @@ export default function WeightSummarySection({
 }) {
     return (
         <div className="mb-10 flex gap-4 flex-wrap justify-center min-[530px]:flex-nowrap">
-            <div className="border border-zinc-200 rounded-md shadow-sm flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
+            <div className="card flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
                 <div className="p-4 md:p-6 flex flex-col h-full">
                     <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">Poids actuel</h3>
                     <div className="flex-grow flex items-center justify-center font-bold max-[530px]:text-lg min-[530px]:text-2xl md:text-3xl">
@@ -23,7 +23,7 @@ export default function WeightSummarySection({
                     </div>
                 </div>
             </div>
-            <div className="border border-zinc-200 rounded-md shadow-sm flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
+            <div className="card flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
                 <div className="p-4 md:p-6 flex flex-col h-full">
                     {weightGoal?.targetWeight ? (
                         <div className="flex justify-between items-start gap-1">
@@ -34,7 +34,7 @@ export default function WeightSummarySection({
                                     initialValue={weightGoal.targetWeight.toString()}
                                     weightGoalId={weightGoal.id}
                                 />
-                                <WeightGoalDeleteModal weightGoalId={weightGoal.id} />
+                                <DeleteWeightGoalModal weightGoalId={weightGoal.id} />
                             </div>
                         </div>
                     ) : (
@@ -58,7 +58,7 @@ export default function WeightSummarySection({
                     </div>
                 </div>
             </div>
-            <div className="border border-zinc-200 rounded-md shadow-sm flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
+            <div className="card flex flex-col w-[160px] h-[160px] min-[530px]:w-auto min-[530px]:h-auto min-lg:max-w-[225px] aspect-square min-[530px]:basis-[calc(50%-0.75rem)] sm:basis-1/3 ">
                 <div className="p-4 md:p-6 flex flex-col h-full">
                     <h3 className="text-center text-base sm:text-left sm:text-lg md:text-xl">Écart</h3>
                     <div className="flex-grow flex items-center justify-center font-bold max-[530px]:text-lg min-[530px]:text-2xl md:text-3xl">
