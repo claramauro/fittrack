@@ -9,15 +9,14 @@ import {
 } from "@/libs/server/database/weight_goal";
 import { ValidationError } from "@/libs/server/errors/customErrors";
 import { getServerAuthSession } from "@/libs/server/nextAuthSession";
-import { ActionState } from "@/libs/types/actionState";
+import { WeightGoalActionState, ActionState } from "@/libs/types/actionState";
 import { targetWeightSchema } from "@/libs/validation/weightGoalSchema";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function createWeightGoalAction(
-    _initialState: ActionState,
+    _initialState: WeightGoalActionState,
     formData: FormData
-): Promise<ActionState> {
+): Promise<WeightGoalActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -35,24 +34,31 @@ export async function createWeightGoalAction(
             await Promise.all(activeGoals.map((goal) => archiveWeightGoal(goal.id)));
         }
         await createWeightGoal(userId, targetWeight);
-        revalidatePath("/");
+        return {
+            status: "success",
+            message: "Objectif créé",
+            formError: null,
+        };
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
         }
         return {
             status: "error",
-            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+            message:
+                error instanceof ValidationError
+                    ? "Donnée non valide, veuillez corriger et valider à nouveau"
+                    : "Une erreur est survenue, veuillez réessayer.",
+            formError: error instanceof ValidationError ? error.message : null,
         };
     }
-    redirect("/");
 }
 
 export async function updateWeightGoalAction(
     weightGoalId: string | undefined,
-    _initialState: ActionState,
+    _initialState: WeightGoalActionState,
     formData: FormData
-): Promise<ActionState> {
+): Promise<WeightGoalActionState> {
     const session = await getServerAuthSession();
     if (!session || !session.user) {
         redirect("/connexion");
@@ -79,17 +85,24 @@ export async function updateWeightGoalAction(
             throw new Error("Unauthorized: The goal does not belong to this user");
         }
         await updateWeightGoal(weightGoalId, targetWeight);
-        revalidatePath("/");
+        return {
+            status: "success",
+            message: "Objectif modifié",
+            formError: null,
+        };
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
         }
         return {
             status: "error",
-            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+            message:
+                error instanceof ValidationError
+                    ? "Donnée non valide, veuillez corriger et valider à nouveau"
+                    : "Une erreur est survenue, veuillez réessayer.",
+            formError: error instanceof ValidationError ? error.message : null,
         };
     }
-    redirect("/");
 }
 export async function archiveWeightGoalAction(
     weightGoalId: string | undefined,
@@ -110,19 +123,20 @@ export async function archiveWeightGoalAction(
             throw new Error("No goals with this ID");
         }
         if (weightGoalToArchive.userId !== userId) {
-            console.error("Unauthorized: The goal does not belong to this user");
             throw new Error("Unauthorized: The goal does not belong to this user");
         }
         await archiveWeightGoal(weightGoalId);
-        revalidatePath("/");
+        return {
+            status: "success",
+            message: "Objectif supprimé",
+        };
     } catch (error) {
         if (error instanceof Error) {
             console.error(error.message);
         }
         return {
             status: "error",
-            message: error instanceof ValidationError ? error.message : "Une erreur est survenue, veuillez réessayer.",
+            message: "Une erreur est survenue, veuillez réessayer.",
         };
     }
-    redirect("/");
 }
