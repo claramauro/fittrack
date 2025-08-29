@@ -1,0 +1,17 @@
+networks:
+  fittrack:
+    driver: bridge
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - fittrack
+    ports: 
+      - 3000:3000
+    env_file:
+      - fittrack.env
+    #depends_on?
+    #.ignore ?
