@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import LayoutContent from "./layout-content";
+import LayoutContent from "./layout-client";
 import Header from "@/ui/layout/header";
 import Avatar from "@/ui/components/avatar";
 import Image from "next/image";
