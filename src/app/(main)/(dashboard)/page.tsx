@@ -1,5 +1,4 @@
 import { getMeasurementsByUser } from "@/libs/server/database/measurement";
-import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import Chart from "@/ui/components/chart";
 import { redirect } from "next/navigation";
 import { getActiveGoalByUser } from "@/libs/server/database/weight_goal";
@@ -8,6 +7,7 @@ import { WeightGoal } from "@/libs/types/weigthGoal";
 import WeightSummarySection from "./WeightSummarySection";
 import MeasurementsDetailsSection from "./measurementsDetailsSection";
 import { getLatestWeight, getWeightDifference } from "@/libs/utils/measurementUtils";
+import { getServerAuthSession } from "@/libs/server/nextAuth";
 
 export default async function DashboardPage() {
     const session = await getServerAuthSession();

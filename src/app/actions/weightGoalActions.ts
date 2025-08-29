@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import {
@@ -8,7 +9,7 @@ import {
     updateWeightGoal,
 } from "@/libs/server/database/weight_goal";
 import { ValidationError } from "@/libs/server/errors/customErrors";
-import { getServerAuthSession } from "@/libs/server/nextAuthSession";
+import { getServerAuthSession } from "@/libs/server/nextAuth";
 import { WeightGoalActionState, ActionState } from "@/libs/types/actionState";
 import { targetWeightSchema } from "@/libs/validation/weightGoalSchema";
 import { redirect } from "next/navigation";

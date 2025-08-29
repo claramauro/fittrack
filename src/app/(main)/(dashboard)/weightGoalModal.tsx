@@ -49,7 +49,7 @@ export default function WeightGoalModal({
         } else if (state.status === "error") {
             toast.error(state.message);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

@@ -42,7 +42,7 @@ export default function UpdateMeasurementModal({ measurement }: { measurement: M
         } else if (state.status === "error") {
             toast.error(state.message);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

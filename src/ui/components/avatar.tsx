@@ -1,5 +1,5 @@
+import { getServerAuthSession } from "@/libs/server/nextAuth";
 import Link from "next/link";
-import { getServerAuthSession } from "@/libs/server/nextAuthSession";
 import { redirect } from "next/navigation";
 
 export default async function Avatar() {

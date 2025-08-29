@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import {
@@ -8,7 +9,7 @@ import {
     deleteMeasurement,
 } from "@/libs/server/database/measurement";
 import { ValidationError } from "@/libs/server/errors/customErrors";
-import { getServerAuthSession } from "@/libs/server/nextAuthSession";
+import { getServerAuthSession } from "@/libs/server/nextAuth";
 import { ActionState, AddMeasurementActionState, UpdateMeasurementActionState } from "@/libs/types/actionState";
 import { measurementsSchema } from "@/libs/validation/measurementsSchema";
 import { revalidatePath } from "next/cache";
@@ -25,7 +26,7 @@ export async function createMeasurementAction(
     const userId = session.user.id;
     const allowedKeys = ["measuredAt", "chest", "underbust", "waist", "belly", "hips", "thigh", "arm", "weight"];
     const measurementsData: Record<string, string | null> = {};
-    for (let [key, value] of formData.entries()) {
+    for (const [key, value] of formData.entries()) {
         if (!allowedKeys.includes(key)) continue;
         if (key === "measuredAt") {
             measurementsData[key] = String(value);
@@ -115,7 +116,7 @@ export async function updateMeasurementAction(
     }
     const userId = session.user.id;
     const measurementsData: Record<string, string | null> = {};
-    for (let [key, value] of formData.entries()) {
+    for (const [key, value] of formData.entries()) {
         measurementsData[key] = value === "" ? null : String(value);
     }
     try {

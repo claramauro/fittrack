@@ -14,7 +14,7 @@ export async function authenticateUser(email: string, password: string) {
 
     if (!user.isVerified) return null;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
     const { password: _, ...userWithoutPassword } = user;
     return userWithoutPassword;
 }

@@ -10,6 +10,7 @@ import { ValueType } from "recharts/types/component/DefaultTooltipContent";
 const THEMES = { light: "", dark: ".dark" } as const;
 
 export type ChartConfig = {
+    // eslint-disable-next-line no-unused-vars
     [k in string]: {
         label?: React.ReactNode;
         icon?: React.ComponentType;
@@ -115,7 +116,7 @@ function ChartTooltipContent({
         indicator?: "line" | "dot" | "dashed";
         nameKey?: string;
         labelKey?: string;
-        valueFormatter?: (value: ValueType) => string;
+        valueFormatter?: (_value: ValueType) => string;
     }) {
     const { config } = useChart();
 
