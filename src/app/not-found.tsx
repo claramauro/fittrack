@@ -9,7 +9,7 @@ export default function NotFound() {
                 <Image src={"/images/logo.png"} alt="" priority fill sizes="(max-width: 640px) 300px, 400px" />
             </div>
             <h2 className="mb-8 font-bold text-2xl sm:text-4xl font-poppins">Page non trouvée</h2>
-            <p>La page demandée n'existe pas.</p>
+            <p>La page demandée n&apos;existe pas.</p>
             <Button type="button" className="mt-8" asChild>
                 <Link href="/">Retour tableau de bord</Link>
             </Button>

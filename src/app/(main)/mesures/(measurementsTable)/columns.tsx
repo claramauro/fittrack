@@ -2,7 +2,6 @@
 
 import { Measurement } from "@/libs/types/measurement";
 import { ColumnDef } from "@tanstack/react-table";
-import { PencilIcon, Trash2Icon } from "lucide-react";
 import UpdateMeasurementModal from "../updateMeasurementModal";
 import moment from "moment";
 import DeleteMeasurementModal from "../deleteMeasurementModal";

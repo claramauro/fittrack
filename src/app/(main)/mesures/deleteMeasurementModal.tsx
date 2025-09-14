@@ -37,7 +37,7 @@ export default function DeleteMeasurementModal({ measurement }: { measurement: M
         } else if (state.status === "error") {
             toast.error(state.message);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>

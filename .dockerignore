@@ -1,0 +1,12 @@
+node_modules
+Dockerfile
+docker-compose.yml
+.dockerignore
+.env
+fittrack.env
+.git
+.gitignore
+*.md
+test
+coverage
+.vscode

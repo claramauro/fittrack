@@ -40,7 +40,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
         } else if (state.status === "error") {
             toast.error(state.message);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <div className="card p-6 max-w-[750px] mx-auto">

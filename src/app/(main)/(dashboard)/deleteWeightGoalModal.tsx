@@ -2,7 +2,7 @@
 
 import { archiveWeightGoalAction } from "@/app/actions/weightGoalActions";
 import { Loader2Icon, Trash2Icon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect } from "react";
 
 import Button from "@/ui/components/button";
 import {
@@ -36,7 +36,7 @@ export default function DeleteWeightGoalModal({ weightGoalId }: { weightGoalId: 
         } else if (state.status === "error") {
             toast.error(state.message);
         }
-    }, [state]);
+    }, [state, router]);
 
     return (
         <AlertDialog>
