@@ -37,5 +37,5 @@ CREATE TABLE weight_goal (
 );
 
 --Si besoin de créer un premier utilisateur : 
-INSERT INTO user (email, password, firstname, lastname, is_verified)
-VALUES ('user1@example.fr', 'password', 'John', 'Doe', true);
+-- INSERT INTO user (email, password, firstname, lastname, is_verified)
+-- VALUES ('user1@example.fr', 'password', 'John', 'Doe', true);#
