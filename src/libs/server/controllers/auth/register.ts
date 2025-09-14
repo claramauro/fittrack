@@ -6,6 +6,7 @@ import { registerSchema } from "@/libs/validation/authSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { sendConfirmationRegisterEmail } from "@/libs/server/services/email";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function generateTokenAndSendMail(
     id: string,
     email: string,
@@ -36,6 +37,7 @@ export async function registerController(req: NextRequest) {
         if (!process.env.JWT_EMAIL_SECRET) {
             throw new Error("JWT_EMAIL_SECRET is not defined");
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const secret = new TextEncoder().encode(process.env.JWT_EMAIL_SECRET);
 
         const hashedPassword = await hashPassword(body.password);
@@ -45,12 +47,13 @@ export async function registerController(req: NextRequest) {
         if (user && !user.isVerified) {
             userData.id = user.id;
             await updateUser(userData);
-            await generateTokenAndSendMail(userData.id, userData.email, userData.firstname, secret);
+            //await generateTokenAndSendMail(userData.id, userData.email, userData.firstname, secret);
             return NextResponse.json({ message: "Succès" }, { status: 202 });
         }
         if (!user) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const userId = await createUser(userData);
-            await generateTokenAndSendMail(userId, userData.email, userData.firstname, secret);
+            //await generateTokenAndSendMail(userId, userData.email, userData.firstname, secret);
             return NextResponse.json({ message: "Succès" }, { status: 200 });
         }
     } catch (error) {
