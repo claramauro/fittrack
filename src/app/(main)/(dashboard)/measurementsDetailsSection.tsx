@@ -3,6 +3,7 @@ import Button from "@/ui/components/button";
 import MeasurementsDetails from "@/app/(main)/(dashboard)/measurementsDetails";
 import clsx from "clsx";
 import Link from "next/link";
+import moment from "moment";
 
 export default function MeasurementsDetailsSection({
     measurements,
@@ -26,7 +27,7 @@ export default function MeasurementsDetailsSection({
                     )}>
                     <div className="w-full md:w-1/2 max-w-[370px] xl:max-w-[450px]">
                         <div className="mb-1 max-lg:text-sm text-right">
-                            {measurements[0].measuredAt.toLocaleDateString()}
+                            {moment(measurements[0].measuredAt).format("DD/MM/YYYY")}
                         </div>
                         <div className="card px-4 py-5 min-[400px]:p-6 xl:p-8 rounded-md shadow-sm lg:text-lg">
                             <MeasurementsDetails
@@ -47,7 +48,7 @@ export default function MeasurementsDetailsSection({
                     ) : (
                         <div className="w-full md:w-1/2 max-w-[370px] xl:max-w-[450px]">
                             <div className="mb-1 max-lg:text-sm text-right">
-                                {measurements[1].measuredAt.toLocaleDateString()}
+                                {moment(measurements[1].measuredAt).format("DD/MM/YYYY")}
                             </div>
                             <div className="card px-4 py-5 min-[400px]:p-6 xl:p-8 lg:text-lg">
                                 <MeasurementsDetails

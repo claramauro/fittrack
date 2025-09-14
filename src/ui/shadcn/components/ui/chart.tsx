@@ -5,6 +5,7 @@ import * as RechartsPrimitive from "recharts";
 
 import { cn } from "@/ui/shadcn/utils";
 import { ValueType } from "recharts/types/component/DefaultTooltipContent";
+import moment from "moment";
 
 // Format: { THEME_NAME: CSS_SELECTOR }
 const THEMES = { light: "", dark: ".dark" } as const;
@@ -213,7 +214,7 @@ function ChartTooltipContent({
                                             <span className="text-foreground font-mono font-medium tabular-nums">
                                                 {valueFormatter
                                                     ? valueFormatter(item.value)
-                                                    : item.value.toLocaleString()}
+                                                    : moment(item.value).format("DD/MM/YYYY")}
                                             </span>
                                         )}
                                     </div>
