@@ -6,7 +6,6 @@ import { registerSchema } from "@/libs/validation/authSchema";
 import { NextRequest, NextResponse } from "next/server";
 import { sendConfirmationRegisterEmail } from "@/libs/server/services/email";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function generateTokenAndSendMail(
     id: string,
     email: string,
@@ -14,7 +13,14 @@ async function generateTokenAndSendMail(
     secret: Uint8Array<ArrayBufferLike>
 ) {
     const token = await generateToken({ id, email, type: "email_confirmation" }, "1h", secret);
-    await sendConfirmationRegisterEmail(firstname, email, token);
+    if (process.env.SEND_MAIL === 'true'){
+        return sendConfirmationRegisterEmail(firstname, email, token);
+    } else if (process.env.SEND_MAIL === 'false'){
+        console.log('Confirmation URL with token : ', `${process.env.BASE_URL}/api/confirmation-email?token=${token}`);
+        return;
+    } else {
+        throw new Error ("SEND_MAIL is not defined in environment.")
+    }
 }
 
 export async function registerController(req: NextRequest) {
@@ -37,7 +43,6 @@ export async function registerController(req: NextRequest) {
         if (!process.env.JWT_EMAIL_SECRET) {
             throw new Error("JWT_EMAIL_SECRET is not defined");
         }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const secret = new TextEncoder().encode(process.env.JWT_EMAIL_SECRET);
 
         const hashedPassword = await hashPassword(body.password);
@@ -47,13 +52,12 @@ export async function registerController(req: NextRequest) {
         if (user && !user.isVerified) {
             userData.id = user.id;
             await updateUser(userData);
-            //await generateTokenAndSendMail(userData.id, userData.email, userData.firstname, secret);
+            await generateTokenAndSendMail(userData.id, userData.email, userData.firstname, secret);
             return NextResponse.json({ message: "Succès" }, { status: 202 });
         }
         if (!user) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const userId = await createUser(userData);
-            //await generateTokenAndSendMail(userId, userData.email, userData.firstname, secret);
+            await generateTokenAndSendMail(userId, userData.email, userData.firstname, secret);
             return NextResponse.json({ message: "Succès" }, { status: 200 });
         }
     } catch (error) {
