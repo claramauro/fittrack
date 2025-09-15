@@ -34,7 +34,7 @@ export default function MeasurementsDetailsSection({
                                 measurement={measurements[0]}
                                 previousMeasurement={measurements.length > 0 ? measurements[1] : undefined}
                                 isLooseWeightGoal={isLooseWeightGoal}
-                                showDifference={true}
+                                showDifference={measurements.length > 1 ? true : false}
                             />
                         </div>
                     </div>
