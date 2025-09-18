@@ -35,7 +35,12 @@ export async function createMeasurementAction(
         }
     }
     try {
+        console.log(measurementsData);
+
         const measurementsSchemaValidation = measurementsSchema.safeParse(measurementsData);
+        console.log(measurementsSchemaValidation.data);
+        console.log(new Date());
+
         if (measurementsSchemaValidation.error) {
             const errors: Record<string, string> = {};
             measurementsSchemaValidation.error.issues.forEach((issue) => {

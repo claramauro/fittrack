@@ -58,8 +58,6 @@ export async function createMeasurement(
     }
 ) {
     const measuredAtString = moment(data.measuredAt).format("YYYY-MM-DD");
-    console.log("bdd", measuredAtString);
-
     await pool.query<ResultSetHeader>(
         "INSERT INTO measurement (user_id, measured_at, weight, chest, underbust, waist, belly, hips, thigh, arm) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);",
         [
