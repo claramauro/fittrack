@@ -38,8 +38,8 @@ export async function createMeasurementAction(
         console.log(measurementsData);
 
         const measurementsSchemaValidation = measurementsSchema.safeParse(measurementsData);
-        console.log(measurementsSchemaValidation.data);
-        console.log(new Date());
+        console.log("la date", measurementsSchemaValidation.data?.measuredAt);
+        console.log("date now (max)", new Date());
 
         if (measurementsSchemaValidation.error) {
             const errors: Record<string, string> = {};
