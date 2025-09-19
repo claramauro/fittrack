@@ -42,6 +42,7 @@ export async function createMeasurementAction(
         console.log("date now (max)", new Date());
 
         if (measurementsSchemaValidation.error) {
+            console.log("la date", measurementsSchemaValidation.error.issues[0]);
             const errors: Record<string, string> = {};
             measurementsSchemaValidation.error.issues.forEach((issue) => {
                 const key = issue.path[0] as keyof AddMeasurementActionState["formErrors"];
