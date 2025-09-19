@@ -58,13 +58,13 @@ export default function DeleteMeasurementModal({ measurement }: { measurement: M
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Annuler</AlertDialogCancel>
-                    <form action={formAction}>
+                    <form action={formAction} className="max-sm:w-full">
                         <Button
                             type="submit"
                             title="Confirmer la suppression"
                             aria-label="Confirmer la suppression"
                             disabled={pending}
-                            className={`bg-destructive hover:bg-destructive cursor-pointer`}>
+                            className={`bg-destructive hover:bg-destructive cursor-pointer max-sm:w-full`}>
                             {pending ? <Loader2Icon className="animate-spin" /> : "Supprimer"}
                         </Button>
                     </form>
