@@ -14,6 +14,7 @@ import { ActionState, AddMeasurementActionState, UpdateMeasurementActionState } 
 import { measurementsSchema } from "@/libs/validation/measurementsSchema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import z from "zod";
 
 export async function createMeasurementAction(
     initialState: AddMeasurementActionState,
@@ -35,14 +36,18 @@ export async function createMeasurementAction(
         }
     }
     try {
-        console.log(measurementsData);
-
         const measurementsSchemaValidation = measurementsSchema.safeParse(measurementsData);
-        console.log("la date", measurementsSchemaValidation.data?.measuredAt);
+
+        //debug
+        console.log("--------------------------");
+        console.log("données avant : ", measurementsData);
+        console.log("succes, la date :", measurementsSchemaValidation.data?.measuredAt);
         console.log("date now (max)", new Date());
+        const parsedDate = z.coerce.date().safeParse(measurementsData.measuredAt);
+        console.log("zod parsed date :", parsedDate);
 
         if (measurementsSchemaValidation.error) {
-            console.log("la date", measurementsSchemaValidation.error.issues[0]);
+            console.log("erreur, la date : ", measurementsSchemaValidation.error.issues);
             const errors: Record<string, string> = {};
             measurementsSchemaValidation.error.issues.forEach((issue) => {
                 const key = issue.path[0] as keyof AddMeasurementActionState["formErrors"];

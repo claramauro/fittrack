@@ -56,7 +56,7 @@ export default function AddMeasurementForm({ latestMeasurement }: { latestMeasur
                         name="measuredAt"
                         required
                         min={moment("1950-01-01").format("YYYY-MM-DD")}
-                        max={moment().format("YYYY-MM-DD")}
+                        //max={moment().format("YYYY-MM-DD")}
                         defaultValue={state.data.measuredAt}
                         className={clsx("input w-min text-base!", state?.formErrors?.measuredAt && "input-error")}
                         aria-describedby="measured-at-error"
