@@ -13,5 +13,18 @@ services:
       - 3000:3000
     env_file:
       - fittrack.env
-    #depends_on?
-    #.ignore ?
+
+  db:
+    image: mysql:9.2
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: fittrack
+    ports: 
+      - 3309:3306
+    networks:
+      - fittrack
+    volumes:
+        - database_data:/var/lib/mysql
+
+volumes:
+    database_data:
